@@ -1,0 +1,25 @@
+{
+  "name": "cloudstoragefront",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.0.10",
+    "axios": "^1.2.1",
+    "bootstrap": "^5.2.3",
+    "element-plus": "^2.2.27",
+    "nprogress": "^0.2.0",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "babel-plugin-component": "^1.1.1",
+    "vite": "^4.0.0"
+  }
+}

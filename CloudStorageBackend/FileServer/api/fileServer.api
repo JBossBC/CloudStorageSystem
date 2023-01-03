@@ -1,0 +1,64 @@
+syntax = "v1"
+
+info(
+    title: "file server api"
+    author: "JBossBC"
+    email: "1577002722@qq.com"
+    version: "v1.0.0"
+)
+
+/**
+   the metaInfo regulations:(map[string]interface)
+   "owner": string(owner name)
+   "location":string(default:/ownerName/user indicating location)
+   "authority":string(default 644) //current cant use
+   "create_time" timestamp(default "")
+
+**/
+type(
+    baseResponse{
+       Result string `json:result`
+       Message string `json:message`
+       Data map[string]interface `json:data`
+    }
+
+    uploadReq{
+        metaInfo map[string]interface  `form: metaInfo` 
+        data byte[] `form: file`
+    }
+    downloadReq{
+        apply
+        metaInfo map[string]interface  `json: metaInfo` //must include the location key and the 
+    }
+    findReq{
+        metaInfo map[string]interface `json:metaInfo` //must include the location key
+    }
+    queryReq{
+        metaInfo map[string]interface   `json:metaInfo`  //mush include the owner name
+    }
+
+)
+
+
+
+@server(
+    handler: "/file"
+    jwt: Auth
+)
+
+service file-api {
+
+    @handler uploadFile
+    post /api/file/upload(uploadReq) returns(baseResponse)
+
+    @handler downloadFile
+    get /api/file/download(downloadReq) returns(baseResponse)
+    
+    @handler getFileInfo
+    get /api/file/get(findReq)returns(baseResponse)
+    
+
+    @handler queryFileInfo
+    get /api/file/query(queryReq)returns(baseResponse)
+    
+}

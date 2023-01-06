@@ -11,7 +11,7 @@
 |golang|1.17.6|
 |go-zero|1.4.2|
 |go-stash|1.0.8|
-|elasticsearch|8.5.3|
+|elasticsearch|7.17.8|
 |filebeat|8.5.3|
 |kibana|7.17.0|
 |zookeeper|3.8.0|

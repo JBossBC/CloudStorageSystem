@@ -1,0 +1,14 @@
+Name: file-api
+Host: 0.0.0.0
+Port: 8889
+
+Auth:
+  AccessSecret: "cloudstoragesystem"
+  AccessExpire: 600
+Log:
+  ServiceName: fileServer
+  Mode: file
+  Encoding: json
+  Path: "C:\\tmp\\file serverLog"
+  Level: info
+  KeepDays: 10

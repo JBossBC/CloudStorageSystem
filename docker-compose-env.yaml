@@ -8,6 +8,7 @@
 ## zookeeper version: 3.8.0
 ## kafka version: 3.3.1
 ## go-stash version:1.0.8
+version: "3"
 services:
  filebeat:
    image: elastic/filebeat:8.5.3
@@ -18,14 +19,14 @@ services:
    restart: always
    entrypoint: "filebeat -e -strict.perms=false"  #解决配置文件权限问题
    volumes:
-   - ./depoly/filebeat/conf/filebeat.yaml:/usr/share/filebeat/filebeat.yaml
+   - ./depoly/filebeat/conf/filebeat.yml:/usr/share/filebeat/filebeat.yml
    - /var/lib/docker/containers:/var/lib/docker/containers
    networks:
    -  cloudStorageSystem
    depends_on:
    -  kafka
  go-stash:
-    image: go-stash:1.0.8
+    image: kevinwan/go-stash:1.0.8
     container_name: go-stash
     environment:
       - TZ=Asia/Shanghai

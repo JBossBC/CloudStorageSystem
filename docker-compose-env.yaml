@@ -86,6 +86,7 @@ services:
    ports:
    - 9092:9092
    environment:
+   - ALLOW_PLAINTEXT_LISTENER=yes
    - KAFKA_ADVERTISED_HOST_NAME=kafka
    - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
    - KAFKA_AUTO_CREATE_TOPICS_ENABLE=false

@@ -15,7 +15,6 @@ services:
    container_name: filebeat
    environment:
        TZ: Asia/Shanghai
-   user: root
    restart: always
    entrypoint: "filebeat -e -strict.perms=false"  #解决配置文件权限问题
    volumes:
@@ -30,7 +29,6 @@ services:
     container_name: go-stash
     environment:
       - TZ=Asia/Shanghai
-    user: root
     restart: always
     volumes:
     - ./deploy/go-stash/etc:/app/etc
@@ -87,6 +85,7 @@ services:
    ports:
    - 9092:9092
    environment:
+   - ALLOW_PLAINTEXT_LISTENER=yes
    - KAFKA_ADVERTISED_HOST_NAME=kafka
    - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
    - KAFKA_AUTO_CREATE_TOPICS_ENABLE=false

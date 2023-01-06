@@ -6,10 +6,31 @@
 
 + backend:
 
-    nginx、docker(OCI)、kubernetes、go-zero、kafka、go-stash、hadoop、elasticsearch、mysql、redis
+|Environment|Version|
+|--|--|
+|go-zero|1.4.2|
+|go-stash|1.0.8|
+|elasticsearch|8.5.3|
+|filebeat|8.5.3|
+|kibana|7.17.0|
+|zookeeper|3.8.0|
+|kafka|3.3.1|
+|nginx|stable version|
+|docker|20.10.21|
+|docker-compose|2.13.0|
+|kubernetes|暂定|
+|DTM|暂定|
+|jaeger|暂定|
+|Prometheus|暂定|
 
 + frontend:
 
+|Environment|Version|
+|--|--|
+|vue3||
+|element-plus||
+|bootstrap||
+|axios||
      vue3、element-plus、bootstrap3、axios
 
 

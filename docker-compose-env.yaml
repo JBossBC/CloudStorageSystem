@@ -30,7 +30,6 @@ services:
     container_name: go-stash
     environment:
       - TZ=Asia/Shanghai
-    user: root
     restart: always
     volumes:
     - ./deploy/go-stash/etc:/app/etc

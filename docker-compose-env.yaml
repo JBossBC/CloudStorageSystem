@@ -19,7 +19,7 @@ services:
    restart: always
    entrypoint: "filebeat -e -strict.perms=false"  #解决配置文件权限问题
    volumes:
-   - ./depoly/filebeat/conf/filebeat.yml:/usr/share/filebeat/filebeat.yml
+   - ./deploy/filebeat/conf/filebeat.yml:/usr/share/filebeat/filebeat.yml
    - /var/lib/docker/containers:/var/lib/docker/containers
    networks:
    -  cloudStorageSystem

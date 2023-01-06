@@ -21,15 +21,15 @@ Clusters:
         - Key: status
           Value: "503"
       - Action: remove_field
-          Fields:
-          - source
-          - _score
-          - "@metadata"
-          - agent
-          - ecs
-          - input
-          - log
-          - fields
+        Fields:
+         - source
+         - _score
+         - "@metadata"
+         - agent
+         - ecs
+         - input
+         - log
+         - fields
       Output:
         ElasticSearch:
           Hosts:

@@ -15,7 +15,6 @@ services:
    container_name: filebeat
    environment:
        TZ: Asia/Shanghai
-   user: root
    restart: always
    entrypoint: "filebeat -e -strict.perms=false"  #解决配置文件权限问题
    volumes:
@@ -42,7 +41,6 @@ services:
  elasticsearch:
    image: elasticsearch:8.5.3
    container_name: elasticsearch
-   user: root
    environment:
    - discovery.type=single-node
    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"

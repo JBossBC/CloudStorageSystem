@@ -2,16 +2,16 @@
 
 #collect the file which contains the log data which is created by server or nginx config
 
-## elasticsearch  version: 8.5.3
+## elasticsearch  version: 7.17.8
 ## kibana version : 7.17.0
-## filebeat version: 8.5.3
+## filebeat version: 7.17.8
 ## zookeeper version: 3.8.0
 ## kafka version: 3.3.1
 ## go-stash version:1.0.8
 version: "3"
 services:
  filebeat:
-   image: elastic/filebeat:8.5.3
+   image: elastic/filebeat:7.17.8
    container_name: filebeat
    environment:
        TZ: Asia/Shanghai
@@ -39,7 +39,7 @@ services:
       - kafka
      
  elasticsearch:
-   image: elasticsearch:8.5.3
+   image: elasticsearch:7.17.8
    container_name: elasticsearch
    environment:
    - discovery.type=single-node
@@ -54,7 +54,7 @@ services:
    networks:
    - cloudStorageSystem
  kibana:
-   image: kibana:8.5.3
+   image: kibana:7.17.8
    container_name: kibana
    environment:
    - elasticsearch.hosts:http://elasticsearch:9200

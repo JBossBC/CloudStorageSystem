@@ -12,8 +12,8 @@
 |go-zero|1.4.2|
 |go-stash|1.0.8|
 |elasticsearch|7.17.8|
-|filebeat|8.5.3|
-|kibana|7.17.0|
+|filebeat|7.17.8|
+|kibana|7.17.8|
 |zookeeper|3.8.0|
 |kafka|3.3.1|
 |nginx|stable version|

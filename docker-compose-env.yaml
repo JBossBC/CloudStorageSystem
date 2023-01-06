@@ -1,13 +1,15 @@
-# log collect container
 
 #collect the file which contains the log data which is created by server or nginx config
-
 ## elasticsearch  version: 7.17.8
 ## kibana version : 7.17.0
 ## filebeat version: 7.17.8
 ## zookeeper version: 3.8.0
 ## kafka version: 3.3.1
 ## go-stash version:1.0.8
+## Prometheus version:2.41.0
+## grafana version:9.3.2
+## jaeger version: 1.41.0
+# log collect container
 version: "3"
 services:
  filebeat:
@@ -66,7 +68,6 @@ services:
    - 5601:5601
    depends_on:
    - elasticsearch  
-
  zookeeper:
    image: zookeeper:3.8.0
    container_name: zookeeper
@@ -77,7 +78,6 @@ services:
    -  2181:2181
    networks:
    - cloudStorageSystem
-
  kafka:  
    image: bitnami/kafka:3.3.1
    container_name: kafka
@@ -96,6 +96,55 @@ services:
    - cloudStorageSystem
    depends_on:
    - zookeeper
+# Prometheus
+ Prometheus:
+  image: bitnami/prometheus:2.41.0
+  container_name: Prometheus
+  environment:
+    TZ: Asia/Shanghai
+  volumes:
+  -  ./deploy/prometheus/server/prometheus.yml:/etc/prometheus/prometheus.yml
+  -  ./data/prometheus/data:/prometheus
+  command:
+  - '--config.file=/etc/prometheus/prometheus.yml'
+  - '--storage.tsdb.path=/prometheus'
+  restart: always
+  ports:
+  - 9090:9090
+  networks:
+  - cloudStorageSystem
+ grafana:
+   image:  grafana/grafana:9.3.2
+   container_name: grafana
+   hostname: grafana
+   environment:
+     TZ: Asia/Shanghai
+   restart: always
+   volumes:
+   - ./data/grafana/data:/var/lib/grafana
+   ports:
+   - 3001:3001
+   networks:
+   -  cloudStorageSystem
+# linktrace
+ jaeger:
+   image: jaegertracing/all-in-one:1.41.0
+   container_name: jaeger
+   restart: always
+   ports:
+   - "5775:5775/udp"
+   - "6831:6831/udp"
+   - "6832:6832/udp"
+   - "5778:5778"
+   - "16686:16686"
+   - "14268:14268"
+   - "9411:9411"
+   environment:
+   - SPAN_STORAGE_TYPE=elasticsearch
+   - ES_SERVER_URL=http://elasticsearch:9200
+   - LOG_LEVEL=debug
+   networks:
+   -  cloudStorageSystem
 
 networks:
   cloudStorageSystem:

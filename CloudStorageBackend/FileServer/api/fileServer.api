@@ -54,5 +54,4 @@ service file-api {
 	@doc "queryFileInfo"
 	@handler queryFileInfo
 	get /api/file/query(queryReq)returns(baseResponse)
-	
 }

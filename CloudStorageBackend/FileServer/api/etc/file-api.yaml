@@ -1,14 +1,25 @@
 Name: file-api
 Host: 0.0.0.0
 Port: 8889
+Mode: dev
 
 Auth:
   AccessSecret: "cloudstoragesystem"
   AccessExpire: 600
+
+
 Log:
   ServiceName: fileServer
-  Mode: file
-  Encoding: json
-  Path: "C:\\tmp\\file serverLog"
+  Mode: console
   Level: info
-  KeepDays: 10
+
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4005
+  Path: /metrics
+Telemetry:
+  Name: fileServer-api
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+

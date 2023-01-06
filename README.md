@@ -21,8 +21,9 @@
 |docker-compose|2.13.0|
 |kubernetes|暂定|
 |DTM|暂定|
-|jaeger|暂定|
-|Prometheus|暂定|
+|jaeger|1.41.0|
+|Prometheus|2.41.0|
+|grafana|9.3.2|
 
 + frontend:
 

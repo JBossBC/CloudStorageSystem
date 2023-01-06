@@ -39,10 +39,9 @@
     </div>
       <div class="input-group mb-3">
         <label class="input-group-text " style="max-height: 30px">邮箱:</label>
-   <el-select v-model="personalInfo.sex" >
-<!--     <template #prefix>-->
-
-<!--     </template>-->
+     <el-select v-model="personalInfo.sex" >
+       <!--     <template #prefix>-->
+       <!--     </template>-->
           <el-option value="0">女</el-option>
           <el-option value="1">男</el-option>
         </el-select>
@@ -68,7 +67,6 @@
   position: absolute;
   min-width: 100px;
   height: 100px;
-
   /*width: 10px;*/
 }
 .dropdown{

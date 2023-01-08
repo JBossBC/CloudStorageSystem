@@ -1,15 +1,15 @@
-package types
+package File
 
 import (
-	"api/internal/types/IFile"
 	"bufio"
+	IFile2 "fileserver/model/File/IFile"
 	"github.com/zeromicro/go-zero/core/logx"
 	"io"
 	"os"
 )
 
 type LocalFile struct {
-	IFile.File
+	IFile2.File
 }
 
 func (lf *LocalFile) InitFile(uri string, deferCall bool) error {
@@ -44,7 +44,7 @@ func (lf *LocalFile) InitFile(uri string, deferCall bool) error {
 	if err != nil {
 		return err
 	}
-	lf.MetaInfo = IFile.CreateFileMeta(fileInfo)
+	lf.MetaInfo = IFile2.CreateFileMeta(fileInfo)
 	return err
 
 }

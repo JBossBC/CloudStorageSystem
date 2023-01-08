@@ -1,12 +1,12 @@
 package handler
 
 import (
+	"fileserver/api/internal/logic"
+	"fileserver/api/internal/svc"
+	"fileserver/api/internal/types"
 	"fmt"
 	"net/http"
 
-	"api/internal/logic"
-	"api/internal/svc"
-	"api/internal/types"
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 

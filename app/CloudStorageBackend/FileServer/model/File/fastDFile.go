@@ -1,8 +1,8 @@
-package types
+package File
 
 import (
-	"api/internal/types/IFile"
 	"errors"
+	"fileserver/model/File/IFile"
 )
 
 type fastDFile struct {

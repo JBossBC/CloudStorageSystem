@@ -1,9 +1,9 @@
 package main
 
 import (
-	"api/internal/config"
-	"api/internal/handler"
-	"api/internal/svc"
+	"fileserver/api/internal/config"
+	"fileserver/api/internal/handler"
+	"fileserver/api/internal/svc"
 	"flag"
 	"fmt"
 

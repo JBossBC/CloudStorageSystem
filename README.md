@@ -36,6 +36,9 @@
      vue3、element-plus、bootstrap3、axios
 
 
++ Mysql DB Name:cloudStorageSystem
+
+
 
 ## v1.0.0(2023.1.2-预期(2023.1.22))
 

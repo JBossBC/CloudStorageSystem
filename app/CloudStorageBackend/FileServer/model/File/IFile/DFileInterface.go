@@ -11,7 +11,7 @@ type IFile interface {
 	GetFileData() []byte
 }
 
-// File  尽量使用充血模型进行优化，data设为私有变量的原因提供延迟注入数据 /
+// File  尽量使用充血模型进行优化，data设为私有变量的原因提供延迟注入数据,同时保证开闭原则 /
 type File struct {
 	// seem the file descriptor
 	MetaInfo *FileMeta
@@ -37,6 +37,10 @@ func (file *File) GetFileLocation() string {
 func (file *File) InitFile(uri string) error {
 	return errors.New("不能使用抽象类")
 }
+
+/**
+  maybe throws the panic from DeferWrapData func
+*/
 func (file *File) GetFileData() []byte {
 	file.WrapOnce.Do(file.DeferWrapData)
 	return file.data

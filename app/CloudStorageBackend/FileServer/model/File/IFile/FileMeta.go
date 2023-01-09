@@ -5,9 +5,10 @@ import (
 	"time"
 )
 
+/**
+文件系统中文件的状态
+*/
 type FileMeta struct {
-	creator     string
-	owner       string
 	name        string
 	create_time time.Time
 	update_time time.Time
@@ -17,12 +18,6 @@ type FileMeta struct {
 	size        int64
 }
 
-func (fm *FileMeta) GetCreator() string {
-	return fm.creator
-}
-func (fm *FileMeta) GetOwner() string {
-	return fm.owner
-}
 func (fm *FileMeta) GetSize() int64 {
 	return fm.size
 }

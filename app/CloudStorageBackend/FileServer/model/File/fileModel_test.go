@@ -5,7 +5,7 @@ import (
 )
 
 func TestFileFactory_CreateFile(t *testing.T) {
-	file, err := GetFileFactory().CreateFile("xxx:///D:/CloudStorage/ProjectDesign/ClassDesign/fileServerModel/README.md", false)
+	file, err := GetFileFactory().CreateFile("file:///D:/CloudStorage/ProjectDesign/ClassDesign/fileServerModel/README.md", true)
 	if err != nil {
 		println(err.Error())
 		return

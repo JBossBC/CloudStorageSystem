@@ -35,6 +35,7 @@ func GetFileFactory() *fileFactory {
 /**
 create file model default local file,use the uri create the fileModel.
 取数据支持延迟调用
+目前只支持本地文件系统还有使用http/https协议的uri
 */
 func (*fileFactory) CreateFile(uri string, deferCall bool) (result IFile.IFile, err error) {
 	var protocolName = strings.Split(uri, ":")[0]

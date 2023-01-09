@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"fileserver/api/internal/logic"
-	"fileserver/api/internal/svc"
-	"fileserver/api/internal/types"
+	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/logic"
+	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/svc"
+	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/types"
 	"fmt"
 	"net/http"
 

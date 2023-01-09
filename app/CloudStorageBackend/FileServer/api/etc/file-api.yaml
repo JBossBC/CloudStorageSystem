@@ -7,6 +7,8 @@ Auth:
   AccessSecret: "cloudstoragesystem"
   AccessExpire: 600
 
+db:
+
 
 Log:
   ServiceName: fileServer

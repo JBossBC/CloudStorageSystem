@@ -1,11 +1,11 @@
-module fileserver
+module cloudStorageSystem
 
 go 1.17
 
 require (
 	github.com/golang-jwt/jwt/v4 v4.4.3
-	github.com/lib/pq v1.10.7
 	github.com/zeromicro/go-zero v1.4.3
+	github.com/zeromicro/go-zero/tools/goctl v1.4.3
 )
 
 require (
@@ -23,7 +23,7 @@ require (
 	github.com/google/pprof v0.0.0-20211214055906-6f57359322fd // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.7.0 // indirect
-	github.com/mattn/go-colorable v0.1.9 // indirect
+	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
 	github.com/openzipkin/zipkin-go v0.4.0 // indirect

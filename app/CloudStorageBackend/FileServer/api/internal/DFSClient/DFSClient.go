@@ -1,6 +1,6 @@
 package DFSClient
 
-import "api/internal/DFSClient/IClient"
+import "cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/DFSClient/IClient"
 
 type FastDFSClient struct {
 	IClient.IDFSClient

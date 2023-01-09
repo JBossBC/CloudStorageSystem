@@ -20,7 +20,6 @@ type (
 		Message string                 `json:"message"`
 		Data    map[string]interface{} `json:"data"`
 	}
-
 	uploadReq {
 		MetaInfo map[string]interface{} `json:"metaInfo"`
 		Data     []byte                 `form:"fileData"`

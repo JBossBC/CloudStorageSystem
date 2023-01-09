@@ -22,6 +22,9 @@ func (fm *FileMeta) GetSize() int64 {
 	return fm.size
 }
 
+/**
+伪适配，貌似标准库中的filestat不支持运行时调用,只能一个一个匹配
+*/
 func CreateFileMeta(fileInfo os.FileInfo) (metaData *FileMeta) {
 	metaData = &FileMeta{}
 	metaData.size = fileInfo.Size()

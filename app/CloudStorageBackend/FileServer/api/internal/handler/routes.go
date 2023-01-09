@@ -2,9 +2,9 @@
 package handler
 
 import (
+	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/svc"
 	"net/http"
 
-	"api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )

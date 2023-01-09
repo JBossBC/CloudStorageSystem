@@ -1,7 +1,7 @@
 package svc
 
 import (
-	"fileserver/api/internal/config"
+	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/config"
 )
 
 type ServiceContext struct {

@@ -2,14 +2,15 @@ package File
 
 import (
 	"bufio"
-	IFile2 "fileserver/model/File/IFile"
+	"cloudStorageSystem/app/CloudStorageBackend/FileServer/model/File/IFile"
+
 	"github.com/zeromicro/go-zero/core/logx"
 	"io"
 	"os"
 )
 
 type LocalFile struct {
-	IFile2.File
+	IFile.File
 }
 
 func (lf *LocalFile) InitFile(uri string, deferCall bool) error {
@@ -47,7 +48,6 @@ func (lf *LocalFile) InitFile(uri string, deferCall bool) error {
 	if err != nil {
 		return err
 	}
-	lf.MetaInfo = IFile2.CreateFileMeta(fileInfo)
+	lf.MetaInfo = IFile.CreateFileMeta(fileInfo)
 	return err
-
 }

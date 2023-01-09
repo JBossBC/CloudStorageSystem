@@ -1,10 +1,9 @@
 package logic
 
 import (
+	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/svc"
+	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/types"
 	"context"
-	"fileserver/api/internal/svc"
-	"fileserver/api/internal/types"
-	"fmt"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,6 +24,6 @@ func NewGetFileInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetFi
 
 func (l *GetFileInfoLogic) GetFileInfo(req *types.FindReq) (resp *types.BaseResponse, err error) {
 	// todo: add your logic here and delete this line
-	fmt.Println("-----------------------------------HELLO----------------------------------------")
+
 	return
 }

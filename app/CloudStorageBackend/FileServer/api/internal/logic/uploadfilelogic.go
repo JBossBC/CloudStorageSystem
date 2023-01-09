@@ -1,9 +1,9 @@
 package logic
 
 import (
+	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/svc"
+	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/types"
 	"context"
-	"fileserver/api/internal/svc"
-	"fileserver/api/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,6 +24,5 @@ func NewUploadFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Upload
 
 func (l *UploadFileLogic) UploadFile(req *types.UploadReq) (resp *types.BaseResponse, err error) {
 	// todo: add your logic here and delete this line
-
 	return
 }

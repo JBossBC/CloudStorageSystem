@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"fileserver/api/internal/logic"
-	"fileserver/api/internal/svc"
-	"fileserver/api/internal/types"
+	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/logic"
+	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/svc"
+	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/types"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
@@ -16,7 +16,6 @@ func downloadFileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.Error(w, err)
 			return
 		}
-
 		l := logic.NewDownloadFileLogic(r.Context(), svcCtx)
 		resp, err := l.DownloadFile(&req)
 		if err != nil {

@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FileServerClient interface {
 	FindOne(ctx context.Context, in *FindFileReq, opts ...grpc.CallOption) (*FileMetaInfo, error)
-	QueryFiles(ctx context.Context, in *FindFileReq, opts ...grpc.CallOption) (*QueryFileRes, error)
+	QueryFiles(ctx context.Context, in *QueryFileReq, opts ...grpc.CallOption) (*QueryFileRes, error)
 }
 
 type fileServerClient struct {
@@ -43,7 +43,7 @@ func (c *fileServerClient) FindOne(ctx context.Context, in *FindFileReq, opts ..
 	return out, nil
 }
 
-func (c *fileServerClient) QueryFiles(ctx context.Context, in *FindFileReq, opts ...grpc.CallOption) (*QueryFileRes, error) {
+func (c *fileServerClient) QueryFiles(ctx context.Context, in *QueryFileReq, opts ...grpc.CallOption) (*QueryFileRes, error) {
 	out := new(QueryFileRes)
 	err := c.cc.Invoke(ctx, "/pb.fileServer/QueryFiles", in, out, opts...)
 	if err != nil {
@@ -57,7 +57,7 @@ func (c *fileServerClient) QueryFiles(ctx context.Context, in *FindFileReq, opts
 // for forward compatibility
 type FileServerServer interface {
 	FindOne(context.Context, *FindFileReq) (*FileMetaInfo, error)
-	QueryFiles(context.Context, *FindFileReq) (*QueryFileRes, error)
+	QueryFiles(context.Context, *QueryFileReq) (*QueryFileRes, error)
 	mustEmbedUnimplementedFileServerServer()
 }
 
@@ -68,7 +68,7 @@ type UnimplementedFileServerServer struct {
 func (UnimplementedFileServerServer) FindOne(context.Context, *FindFileReq) (*FileMetaInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindOne not implemented")
 }
-func (UnimplementedFileServerServer) QueryFiles(context.Context, *FindFileReq) (*QueryFileRes, error) {
+func (UnimplementedFileServerServer) QueryFiles(context.Context, *QueryFileReq) (*QueryFileRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryFiles not implemented")
 }
 func (UnimplementedFileServerServer) mustEmbedUnimplementedFileServerServer() {}
@@ -103,7 +103,7 @@ func _FileServer_FindOne_Handler(srv interface{}, ctx context.Context, dec func(
 }
 
 func _FileServer_QueryFiles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindFileReq)
+	in := new(QueryFileReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -115,7 +115,7 @@ func _FileServer_QueryFiles_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/pb.fileServer/QueryFiles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FileServerServer).QueryFiles(ctx, req.(*FindFileReq))
+		return srv.(FileServerServer).QueryFiles(ctx, req.(*QueryFileReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }

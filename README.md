@@ -35,7 +35,6 @@
 |element-plus||
 |bootstrap||
 |axios||
-     vue3、element-plus、bootstrap3、axios
 
 
 + Mysql DB Name:cloudStorageSystem

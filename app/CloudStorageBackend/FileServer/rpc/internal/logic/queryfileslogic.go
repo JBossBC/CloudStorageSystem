@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 
 	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/internal/svc"
 	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/pb"
@@ -23,8 +24,17 @@ func NewQueryFilesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *QueryF
 	}
 }
 
-func (l *QueryFilesLogic) QueryFiles(in *pb.FindFileReq) (*pb.QueryFileRes, error) {
+func (l *QueryFilesLogic) QueryFiles(in *pb.QueryFileReq) (*pb.QueryFileRes, error) {
 	// todo: add your logic here and delete this line
-    
-	return &pb.QueryFileRes{}, nil
+	var owner = in.Owner
+	if owner == "" {
+		return nil, sqlx.ErrNotFound
+	}
+	query, err := l.svcCtx.FileModel.Query(l.ctx, owner)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.QueryFileRes{
+		List: pb.GetFileMetaList(query),
+	}, nil
 }

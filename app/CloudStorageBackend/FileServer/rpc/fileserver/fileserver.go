@@ -15,11 +15,12 @@ import (
 type (
 	FileMetaInfo = pb.FileMetaInfo
 	FindFileReq  = pb.FindFileReq
+	QueryFileReq = pb.QueryFileReq
 	QueryFileRes = pb.QueryFileRes
 
 	FileServer interface {
 		FindOne(ctx context.Context, in *FindFileReq, opts ...grpc.CallOption) (*FileMetaInfo, error)
-		QueryFiles(ctx context.Context, in *FindFileReq, opts ...grpc.CallOption) (*QueryFileRes, error)
+		QueryFiles(ctx context.Context, in *QueryFileReq, opts ...grpc.CallOption) (*QueryFileRes, error)
 	}
 
 	defaultFileServer struct {
@@ -38,7 +39,7 @@ func (m *defaultFileServer) FindOne(ctx context.Context, in *FindFileReq, opts .
 	return client.FindOne(ctx, in, opts...)
 }
 
-func (m *defaultFileServer) QueryFiles(ctx context.Context, in *FindFileReq, opts ...grpc.CallOption) (*QueryFileRes, error) {
+func (m *defaultFileServer) QueryFiles(ctx context.Context, in *QueryFileReq, opts ...grpc.CallOption) (*QueryFileRes, error) {
 	client := pb.NewFileServerClient(m.cli.Conn())
 	return client.QueryFiles(ctx, in, opts...)
 }

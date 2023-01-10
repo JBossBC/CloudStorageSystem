@@ -1,12 +1,12 @@
 Name: fileserver.rpc
-ListenOn: 0.0.0.0:8080
+ListenOn: 0.0.0.0:3001
 Etcd:
   Hosts:
-  - 127.0.0.1:2379
+  - 0.0.0.0:2379
   Key: fileserver.rpc
 
 DB:
-  DataSource: root:root@tcp(mysql:3306)/cloudstoragesystem?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  DataSource: root:root@tcp(localhost:3306)/cloudstoragesystem?charset=utf8&parseTime=true
 Cache:
   - Host: localhost:6379
     Pass: root

@@ -26,3 +26,9 @@ Telemetry:
   Sampler: 1.0
   Batcher: jaeger
 
+FileServerRpcConfig:
+  Etcd:
+    Hosts: [127.0.0.1:2379]
+    Key: fileserver.rpc
+
+

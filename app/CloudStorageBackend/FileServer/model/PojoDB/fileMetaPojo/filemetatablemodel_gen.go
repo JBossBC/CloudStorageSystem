@@ -31,7 +31,7 @@ type (
 		FindOne(ctx context.Context, creator string, name string) (*Filemetatable, error)
 		Update(ctx context.Context, data *Filemetatable) error
 		Delete(ctx context.Context, creator string) error
-		query(ctx context.Context, creator string) ([]Filemetatable, error)
+		Query(ctx context.Context, creator string) ([]*Filemetatable, error)
 	}
 
 	defaultFilemetatableModel struct {
@@ -48,7 +48,7 @@ type (
 		TypeOf      string       `db:"typeOf"`
 		UpdateTime  time.Time    `db:"update_time"`
 		Size        int64        `db:"size"`
-		IsDir       bool         `db:"isDir"`
+		IsDir       int          `db:"isDir"`
 		DeleteTime  sql.NullTime `db:"delete_time"`
 	}
 )
@@ -79,6 +79,18 @@ func (m *defaultFilemetatableModel) FindOne(ctx context.Context, creator string,
 	switch err {
 	case nil:
 		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+func (m *defaultFilemetatableModel) Query(ctx context.Context, creator string) ([]*Filemetatable, error) {
+	var resp []*Filemetatable
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, fmt.Sprintf("select %s from %s where `creator` = \"%s\"", filemetatableRows, m.table, creator))
+	switch err {
+	case nil:
+		return resp, nil
 	case sqlc.ErrNotFound:
 		return nil, ErrNotFound
 	default:

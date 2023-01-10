@@ -1,4 +1,3 @@
-
 #collect the file which contains the log data which is created by server or nginx config
 ## elasticsearch  version: 7.17.8
 ## kibana version : 7.17.0

@@ -20,11 +20,13 @@ message FindFileReq{
   string owner=1;
   string name=2;
 }
-
+message QueryFileReq{
+  string owner=1;
+}
 message QueryFileRes{
     repeated FileMetaInfo list=1;
 }
 service fileServer{
   rpc FindOne(FindFileReq)returns(FileMetaInfo);
-  rpc QueryFiles(FindFileReq)returns(QueryFileRes);
+  rpc QueryFiles(QueryFileReq)returns(QueryFileRes);
 }

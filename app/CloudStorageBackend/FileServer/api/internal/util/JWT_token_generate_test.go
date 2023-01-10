@@ -3,14 +3,11 @@ package util
 import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
+	"testing"
 	"time"
 )
 
-func main() {
-	generateToken()
-}
-
-func generateToken() {
+func TestGenerateToken(t *testing.T) {
 	cliams := make(jwt.MapClaims)
 	cliams["exp"] = time.Now().Unix() + 300000000000000000
 	cliams["iat"] = time.Now().Unix()

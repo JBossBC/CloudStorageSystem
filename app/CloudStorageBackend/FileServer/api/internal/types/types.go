@@ -4,21 +4,18 @@ package types
 type BaseResponse struct {
 	Result  string                 `json:"result"`
 	Message string                 `json:"message"`
-	Data    map[string]interface{} `json:"data"`
+	Data    interface{} `json:"data"`
 }
 
-func GetSuccessRep(data map[string]interface{})*BaseResponse{
-	return &BaseResponse{
-		Result: "true",
-		Message: "获取成功",
-		Data:data,
-		}
+func(br *BaseResponse) GetSuccessRep(data interface{}){
+      br.Data=data
+	  br.Result="true"
+	  br.Message="获取成功"
 }
-func GetFailedRep(msg string)*BaseResponse{
-	return &BaseResponse{
-		Result: "fail",
-		Message: msg,
-	}
+
+func( br *BaseResponse) GetFailedRep(msg string){
+	 br.Result= "fail"
+	 br.Message=msg
 }
 
 type UploadReq struct {

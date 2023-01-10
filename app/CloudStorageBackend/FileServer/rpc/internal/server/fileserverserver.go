@@ -27,7 +27,7 @@ func (s *FileServerServer) FindOne(ctx context.Context, in *pb.FindFileReq) (*pb
 	return l.FindOne(in)
 }
 
-func (s *FileServerServer) QueryFiles(ctx context.Context, in *pb.FindFileReq) (*pb.QueryFileRes, error) {
+func (s *FileServerServer) QueryFiles(ctx context.Context, in *pb.QueryFileReq) (*pb.QueryFileRes, error) {
 	l := logic.NewQueryFilesLogic(ctx, s.svcCtx)
 	return l.QueryFiles(in)
 }

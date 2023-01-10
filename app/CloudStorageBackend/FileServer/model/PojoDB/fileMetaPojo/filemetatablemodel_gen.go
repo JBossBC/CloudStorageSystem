@@ -31,6 +31,7 @@ type (
 		FindOne(ctx context.Context, creator string, name string) (*Filemetatable, error)
 		Update(ctx context.Context, data *Filemetatable) error
 		Delete(ctx context.Context, creator string) error
+		query(ctx context.Context, creator string) ([]Filemetatable, error)
 	}
 
 	defaultFilemetatableModel struct {
@@ -102,7 +103,9 @@ func (m *defaultFilemetatableModel) Update(ctx context.Context, data *Filemetata
 	}, cloudStorageSystemFilemetatableCreatorKey)
 	return err
 }
-
+func (m *defaultFilemetatableModel) query(ctx context.Context, creator string) ([]Filemetatable, error) {
+	return nil, nil
+}
 func (m *defaultFilemetatableModel) formatPrimary(primary interface{}) string {
 	return fmt.Sprintf("%s%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, primary)
 }

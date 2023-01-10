@@ -9,6 +9,7 @@
 |Environment|Version|
 |--|--|
 |golang|1.17.6|
+|etcd|3.5.0|
 |go-zero|1.4.2|
 |go-stash|1.0.8|
 |elasticsearch|7.17.8|

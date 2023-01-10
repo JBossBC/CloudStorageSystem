@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"errors"
+	"github.com/zeromicro/go-zero/core/stores/sqlc"
 
 	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/internal/svc"
 	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/pb"
@@ -29,7 +29,7 @@ func (l *FindOneLogic) FindOne(in *pb.FindFileReq) (*pb.FileMetaInfo, error) {
 	var owner = in.Owner
 	var name = in.Name
 	if owner == "" || name == "" {
-		return nil, errors.New("文件不存在")
+		return nil, sqlc.ErrNotFound
 	}
 	fileModel, err := l.svcCtx.FileModel.FindOne(l.ctx, owner, name)
 	if err != nil {

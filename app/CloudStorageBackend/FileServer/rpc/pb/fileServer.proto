@@ -1,5 +1,30 @@
 syntax = "proto3";
-
+option go_package = "./pb";
 package pb;
 
 
+message FileMetaInfo{
+  string creator=1;
+  string createGroup=2;
+  string name=3;
+  string create_time=4;
+  string authority=5;
+  string typeOf=6;
+  string update_time=7;
+  int64 size=8;
+  bool   isDir=9;
+  string delete_time=10;
+}
+
+message FindFileReq{
+  string owner=1;
+  string name=2;
+}
+
+message QueryFileRes{
+    repeated FileMetaInfo list=1;
+}
+service fileServer{
+  rpc FindOne(FindFileReq)returns(FileMetaInfo);
+  rpc QueryFiles(FindFileReq)returns(QueryFileRes);
+}

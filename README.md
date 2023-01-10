@@ -14,6 +14,7 @@
 |elasticsearch|7.17.8|
 |filebeat|7.17.8|
 |kibana|7.17.8|
+|asynq|0.24.0|
 |zookeeper|3.8.0|
 |kafka|3.3.1|
 |nginx|stable version|

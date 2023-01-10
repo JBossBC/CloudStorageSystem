@@ -1,0 +1,27 @@
+Name: mq-api
+Host: 0.0.0.0
+Port: 8888
+
+
+#监控
+Prometheus:
+  Host: 0.0.0.0
+  Port: 4010
+  Path: /metrics
+
+#Link Tracking
+Telemetry:
+  Name: mqueue-job
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
+Log:
+  ServiceName: mqueue-fileServer
+  Level: error
+
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Pass: root
+

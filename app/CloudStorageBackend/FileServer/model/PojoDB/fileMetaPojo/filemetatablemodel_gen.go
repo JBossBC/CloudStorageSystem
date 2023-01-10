@@ -28,7 +28,7 @@ var (
 type (
 	filemetatableModel interface {
 		Insert(ctx context.Context, data *Filemetatable) (sql.Result, error)
-		FindOne(ctx context.Context, creator string) (*Filemetatable, error)
+		FindOne(ctx context.Context, creator string, name string) (*Filemetatable, error)
 		Update(ctx context.Context, data *Filemetatable) error
 		Delete(ctx context.Context, creator string) error
 	}
@@ -47,7 +47,7 @@ type (
 		TypeOf      string       `db:"typeOf"`
 		UpdateTime  time.Time    `db:"update_time"`
 		Size        int64        `db:"size"`
-		IsDir       int64        `db:"isDir"`
+		IsDir       bool         `db:"isDir"`
 		DeleteTime  sql.NullTime `db:"delete_time"`
 	}
 )
@@ -68,12 +68,12 @@ func (m *defaultFilemetatableModel) Delete(ctx context.Context, creator string) 
 	return err
 }
 
-func (m *defaultFilemetatableModel) FindOne(ctx context.Context, creator string) (*Filemetatable, error) {
+func (m *defaultFilemetatableModel) FindOne(ctx context.Context, creator string, name string) (*Filemetatable, error) {
 	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, creator)
 	var resp Filemetatable
 	err := m.QueryRowCtx(ctx, &resp, cloudStorageSystemFilemetatableCreatorKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
-		query := fmt.Sprintf("select %s from %s where `creator` = ? limit 1", filemetatableRows, m.table)
-		return conn.QueryRowCtx(ctx, v, query, creator)
+		query := fmt.Sprintf("select %s from %s where `creator` = ? and 'name'= ? limit 1", filemetatableRows, m.table)
+		return conn.QueryRowCtx(ctx, v, query, creator, name)
 	})
 	switch err {
 	case nil:

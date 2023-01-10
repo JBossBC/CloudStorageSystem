@@ -24,6 +24,10 @@ func NewGetFileInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetFi
 
 func (l *GetFileInfoLogic) GetFileInfo(req *types.FindReq) (resp *types.BaseResponse, err error) {
 	// todo: add your logic here and delete this line
-
+	var owner, ok = req.MetaInfo["owner"]
+	if !ok {
+		return types.GetFailedRep(""), nil
+	}
+	fileMetaPojo.
 	return
 }

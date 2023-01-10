@@ -7,6 +7,20 @@ type BaseResponse struct {
 	Data    map[string]interface{} `json:"data"`
 }
 
+func GetSuccessRep(data map[string]interface{})*BaseResponse{
+	return &BaseResponse{
+		Result: "true",
+		Message: "获取成功",
+		Data:data,
+		}
+}
+func GetFailedRep(msg string)*BaseResponse{
+	return &BaseResponse{
+		Result: "fail",
+		Message: msg,
+	}
+}
+
 type UploadReq struct {
 	MetaInfo map[string]interface{} `json:"metaInfo"`
 	Data     []byte                 `form:"fileData"`

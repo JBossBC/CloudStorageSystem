@@ -24,13 +24,6 @@ func (lf *LocalFile) InitFile(uri string, deferCall bool) error {
 		lf.DeferWrapData = func() {
 			lf.Lock.Lock()
 			defer lf.Lock.Unlock()
-			//defer func() {
-			//	lf.Lock.Unlock()
-			//	if deferErr := recover(); deferErr != nil {
-			//		logx.Errorf("读取文件数据失败:%s", deferErr)
-			//		result = false
-			//	}
-			//}()
 			data, _ := io.ReadAll(bufio.NewReader(lf.DataSource))
 			lf.SetFileData(data)
 

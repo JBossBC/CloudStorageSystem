@@ -1,10 +1,8 @@
-FROM golang:1.17.6 AS builder
+FROM golang:alpine AS builder
 
 ENV CGO_ENABLED 0
 ENV GOPROXY https://goproxy.cn,direct
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
-RUN apk update --no-cache && apk add --no-cache tzdata
 
 WORKDIR /build
 
@@ -12,12 +10,13 @@ ADD go.mod .
 ADD go.sum .
 RUN go mod download
 COPY . .
-RUN go build -ldflags="-s -w" -o /app/fileServer/api . ./api/file.go
-RUN go build -ldflags="-s -w" -o /app/fileServer/rpc . ./rpc/fileServer.go
+RUN mkdir -p /app/fileServer
+RUN go build -ldflags="-s -w" -o /app/fileServer/api  ./api/file.go
+RUN go build -ldflags="-s -w" -o /app/fileServer/rpc  ./rpc/fileserver.go
 
 
 
-FROM golang:alpine
+FROM scratch
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder /usr/share/zoneinfo/Asia/Shanghai /usr/share/zoneinfo/Asia/Shanghai
@@ -25,7 +24,7 @@ ENV TZ Asia/Shanghai
 
 WORKDIR /app
 
-COPY --from=builder /app/fileserver /app/fileserver
+COPY --from=builder /app/fileServer /app/fileServer
 
 EXPOSE 8001
 EXPOSE 8889

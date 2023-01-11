@@ -2,7 +2,7 @@ package File
 
 import (
 	"bufio"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/model/File/IFile"
+	"fileServer/model/File/IFile"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"io"

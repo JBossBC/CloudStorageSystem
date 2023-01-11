@@ -5,8 +5,7 @@ package fileserver
 
 import (
 	"context"
-
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/pb"
+	"fileServer/rpc/pb"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

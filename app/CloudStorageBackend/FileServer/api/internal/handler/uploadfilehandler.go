@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/logic"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/svc"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/types"
+	"fileServer/api/internal/logic"
+	"fileServer/api/internal/svc"
+	"fileServer/api/internal/types"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"

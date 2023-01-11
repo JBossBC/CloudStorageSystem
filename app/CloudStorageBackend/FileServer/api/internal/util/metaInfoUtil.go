@@ -1,8 +1,8 @@
 package util
 
 import (
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/pb"
 	"errors"
+	"fileServer/rpc/pb"
 	"reflect"
 )
 

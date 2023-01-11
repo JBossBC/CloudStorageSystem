@@ -2,7 +2,6 @@ package main
 
 import (
 	"cloudStorageSystem/app/CloudStorageBackend/FileServer/mq/internal/config"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/mq/internal/svc"
 	"flag"
 	"github.com/zeromicro/go-zero/core/conf"
 )
@@ -14,5 +13,6 @@ func main() {
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
-	server := svc.NewAsynqServer(c)
+	//server := svc.NewAsynqServer(c)
+
 }

@@ -1,7 +1,7 @@
 package util
 
 import (
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/pb"
+	"fileServer/rpc/pb"
 	"fmt"
 	"testing"
 	"time"

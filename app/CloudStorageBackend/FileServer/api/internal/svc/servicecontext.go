@@ -1,8 +1,8 @@
 package svc
 
 import (
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/config"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/fileserver"
+	"fileServer/api/internal/config"
+	"fileServer/rpc/fileserver"
 	"github.com/zeromicro/go-zero/zrpc"
 )
 

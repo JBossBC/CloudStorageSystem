@@ -2,10 +2,9 @@ package logic
 
 import (
 	"context"
+	"fileServer/rpc/internal/svc"
+	"fileServer/rpc/pb"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
-
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/internal/svc"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

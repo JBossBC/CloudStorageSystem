@@ -1,9 +1,9 @@
 package logic
 
 import (
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/svc"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/types"
 	"context"
+	"fileServer/api/internal/svc"
+	"fileServer/api/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

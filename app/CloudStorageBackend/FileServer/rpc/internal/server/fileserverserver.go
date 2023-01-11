@@ -5,10 +5,9 @@ package server
 
 import (
 	"context"
-
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/internal/logic"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/internal/svc"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/pb"
+	"fileServer/rpc/internal/logic"
+	"fileServer/rpc/internal/svc"
+	"fileServer/rpc/pb"
 )
 
 type FileServerServer struct {

@@ -1,8 +1,8 @@
 package svc
 
 import (
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/model/PojoDB/fileMetaPojo"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/internal/config"
+	"fileServer/model/PojoDB/fileMetaPojo"
+	"fileServer/rpc/internal/config"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 

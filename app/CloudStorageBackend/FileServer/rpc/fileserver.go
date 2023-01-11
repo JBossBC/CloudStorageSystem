@@ -1,13 +1,12 @@
 package main
 
 import (
+	"fileServer/rpc/internal/config"
+	"fileServer/rpc/internal/server"
+	"fileServer/rpc/internal/svc"
+	"fileServer/rpc/pb"
 	"flag"
 	"fmt"
-
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/internal/config"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/internal/server"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/internal/svc"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/rpc/pb"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"

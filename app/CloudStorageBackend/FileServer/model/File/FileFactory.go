@@ -1,8 +1,8 @@
 package File
 
 import (
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/model/File/IFile"
 	"errors"
+	"fileServer/model/File/IFile"
 
 	"strings"
 	"sync"

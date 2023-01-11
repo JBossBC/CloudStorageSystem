@@ -7,7 +7,7 @@
 package pb
 
 import (
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/model/PojoDB/fileMetaPojo"
+	"fileServer/model/PojoDB/fileMetaPojo"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"

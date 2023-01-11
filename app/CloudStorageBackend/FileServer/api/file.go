@@ -1,9 +1,9 @@
 package main
 
 import (
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/config"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/handler"
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/svc"
+	"fileServer/api/internal/config"
+	"fileServer/api/internal/handler"
+	"fileServer/api/internal/svc"
 	"flag"
 	"fmt"
 	"github.com/zeromicro/go-zero/core/conf"

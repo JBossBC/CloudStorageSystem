@@ -2,7 +2,7 @@
 package handler
 
 import (
-	"cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/svc"
+	"fileServer/api/internal/svc"
 	"net/http"
 
 

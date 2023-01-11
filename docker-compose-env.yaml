@@ -40,7 +40,7 @@ services:
       - kafka
      
  elasticsearch:
-   image: elasticsearch:7.17.8
+   image: docker.elastic.co/elasticsearch:7.13.4
    container_name: elasticsearch
    environment:
    - discovery.type=single-node
@@ -55,7 +55,7 @@ services:
    networks:
    - cloudStorageSystem
  kibana:
-   image: kibana:7.17.8
+   image: docker.elastic.co/kibana/kibana:7.13.4
    container_name: kibana
    environment:
    - elasticsearch.hosts:http://elasticsearch:9200
@@ -144,6 +144,48 @@ services:
    - LOG_LEVEL=debug
    networks:
    -  cloudStorageSystem
+ etcd:
+   image: bitnami/etcd:3.5
+   container_name: etcd
+   hostname: etcd
+   restart: always
+   ports:
+     -  "2379:2379"
+   networks:
+     - cloudStorageSystem
+ mysql:
+   image: mysql/mysql-server:8.0.28
+   restart: always
+   container_name: mysql
+   ports:
+     - "3306:3306"
+   environment:
+     MYSQL_ROOT_PASSWORD: root
+     TZ: Asia/Shanghai
+   volumes:
+     - ./deploy/DB/mysql/:/docker-entrypoint-initdb.d/
+     - ./data/mysql/data:/var/lib/mysql
+   command:
+     --default-authentication-plugin=mysql_native_password
+     --character-set-server=utf8mb4
+     --collation-server=utf8mb4_general_ci
+     --explicit_defaults_for_timestamp=true
+     --lower_case_table_names=1
+   privileged: true
+   networks:
+     - cloudStorageSystem
+ redis:
+   image: redis:6.2.5
+   container_name: redis
+   ports:
+     - "6379:6379"
+   restart: always
+   volumes:
+     - ./data/redis/data:/data:rw
+   command: "redis-server --requirepass root --appendonly yes"
+   privileged: true
+   networks:
+     - cloudStorageSystem
 
 networks:
   cloudStorageSystem:

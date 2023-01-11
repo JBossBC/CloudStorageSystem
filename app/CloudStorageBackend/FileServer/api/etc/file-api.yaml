@@ -7,9 +7,6 @@ Auth:
   AccessSecret: "cloudstoragesystem"
   AccessExpire: 600
 
-db:
-
-
 Log:
   ServiceName: fileServer
   Mode: console
@@ -28,7 +25,7 @@ Telemetry:
 
 FileServerRpcConfig:
   Etcd:
-    Hosts: [127.0.0.1:2379]
+    Hosts: [etcd:2379]
     Key: fileserver.rpc
 
 

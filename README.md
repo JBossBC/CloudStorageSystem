@@ -26,6 +26,8 @@
 |jaeger|1.41.0|
 |Prometheus|2.41.0|
 |grafana|9.3.2|
+|mysql|8.0.28|
+|redis|6.2.5|
 
 + frontend:
 

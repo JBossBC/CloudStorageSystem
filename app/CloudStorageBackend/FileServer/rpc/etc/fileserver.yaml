@@ -1,12 +1,18 @@
 Name: fileserver.rpc
-ListenOn: 0.0.0.0:3001
+ListenOn: 0.0.0.0:8001
 Etcd:
   Hosts:
-  - 0.0.0.0:2379
+  - etcd:2379
   Key: fileserver.rpc
 
+Telemetry:
+  Name: fileServer-api
+  Endpoint: http://jaeger:14268/api/traces
+  Sampler: 1.0
+  Batcher: jaeger
+
 DB:
-  DataSource: root:root@tcp(localhost:3306)/cloudstoragesystem?charset=utf8&parseTime=true
+  DataSource: root:root@tcp(mysql:3306)/cloudstoragesystem?charset=utf8&parseTime=true
 Cache:
-  - Host: localhost:6379
+  - Host: redis:6379
     Pass: root

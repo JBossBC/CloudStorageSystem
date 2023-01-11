@@ -1,9 +1,8 @@
-
- global:
+global:
    scrape_interval:
    external_labels:
       monitor: 'codelab-monitor'
- scrape_configs:
+scrape_configs:
  - job_name: 'prometheus'
    scrape_interval: 5s
    static_configs:

@@ -101,6 +101,7 @@ services:
   container_name: Prometheus
   environment:
     TZ: Asia/Shanghai
+  user: root
   volumes:
   -  ./deploy/prometheus/server/prometheus.yml:/etc/prometheus/prometheus.yml
   -  ./data/prometheus/data:/prometheus
@@ -118,6 +119,7 @@ services:
    hostname: grafana
    environment:
      TZ: Asia/Shanghai
+   user: root
    restart: always
    volumes:
    - ./data/grafana/data:/var/lib/grafana

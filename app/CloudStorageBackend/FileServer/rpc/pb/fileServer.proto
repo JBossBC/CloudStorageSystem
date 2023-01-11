@@ -24,9 +24,17 @@ message QueryFileReq{
   string owner=1;
 }
 message QueryFileRes{
-    repeated FileMetaInfo list=1;
+    baseRes result=1;
+    repeated FileMetaInfo list=2;
+}
+
+message baseRes{
+  string result=1;
+  string message=2;
 }
 service fileServer{
   rpc FindOne(FindFileReq)returns(FileMetaInfo);
   rpc QueryFiles(QueryFileReq)returns(QueryFileRes);
+  rpc InertOne(FileMetaInfo)returns(baseRes);
+  rpc DeleteOne(FileMetaInfo)returns(baseRes);
 }

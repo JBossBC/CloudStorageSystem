@@ -5,6 +5,7 @@ package fileserver
 
 import (
 	"context"
+
 	"fileServer/rpc/pb"
 
 	"github.com/zeromicro/go-zero/zrpc"
@@ -12,6 +13,7 @@ import (
 )
 
 type (
+	BaseRes      = pb.BaseRes
 	FileMetaInfo = pb.FileMetaInfo
 	FindFileReq  = pb.FindFileReq
 	QueryFileReq = pb.QueryFileReq
@@ -20,6 +22,8 @@ type (
 	FileServer interface {
 		FindOne(ctx context.Context, in *FindFileReq, opts ...grpc.CallOption) (*FileMetaInfo, error)
 		QueryFiles(ctx context.Context, in *QueryFileReq, opts ...grpc.CallOption) (*QueryFileRes, error)
+		InertOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error)
+		DeleteOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error)
 	}
 
 	defaultFileServer struct {
@@ -41,4 +45,14 @@ func (m *defaultFileServer) FindOne(ctx context.Context, in *FindFileReq, opts .
 func (m *defaultFileServer) QueryFiles(ctx context.Context, in *QueryFileReq, opts ...grpc.CallOption) (*QueryFileRes, error) {
 	client := pb.NewFileServerClient(m.cli.Conn())
 	return client.QueryFiles(ctx, in, opts...)
+}
+
+func (m *defaultFileServer) InertOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error) {
+	client := pb.NewFileServerClient(m.cli.Conn())
+	return client.InertOne(ctx, in, opts...)
+}
+
+func (m *defaultFileServer) DeleteOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error) {
+	client := pb.NewFileServerClient(m.cli.Conn())
+	return client.DeleteOne(ctx, in, opts...)
 }

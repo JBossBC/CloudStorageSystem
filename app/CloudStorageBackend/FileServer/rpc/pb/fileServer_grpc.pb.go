@@ -24,6 +24,8 @@ const _ = grpc.SupportPackageIsVersion7
 type FileServerClient interface {
 	FindOne(ctx context.Context, in *FindFileReq, opts ...grpc.CallOption) (*FileMetaInfo, error)
 	QueryFiles(ctx context.Context, in *QueryFileReq, opts ...grpc.CallOption) (*QueryFileRes, error)
+	InertOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error)
+	DeleteOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error)
 }
 
 type fileServerClient struct {
@@ -52,12 +54,32 @@ func (c *fileServerClient) QueryFiles(ctx context.Context, in *QueryFileReq, opt
 	return out, nil
 }
 
+func (c *fileServerClient) InertOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error) {
+	out := new(BaseRes)
+	err := c.cc.Invoke(ctx, "/pb.fileServer/InertOne", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fileServerClient) DeleteOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error) {
+	out := new(BaseRes)
+	err := c.cc.Invoke(ctx, "/pb.fileServer/DeleteOne", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FileServerServer is the server API for FileServer service.
 // All implementations must embed UnimplementedFileServerServer
 // for forward compatibility
 type FileServerServer interface {
 	FindOne(context.Context, *FindFileReq) (*FileMetaInfo, error)
 	QueryFiles(context.Context, *QueryFileReq) (*QueryFileRes, error)
+	InertOne(context.Context, *FileMetaInfo) (*BaseRes, error)
+	DeleteOne(context.Context, *FileMetaInfo) (*BaseRes, error)
 	mustEmbedUnimplementedFileServerServer()
 }
 
@@ -70,6 +92,12 @@ func (UnimplementedFileServerServer) FindOne(context.Context, *FindFileReq) (*Fi
 }
 func (UnimplementedFileServerServer) QueryFiles(context.Context, *QueryFileReq) (*QueryFileRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryFiles not implemented")
+}
+func (UnimplementedFileServerServer) InertOne(context.Context, *FileMetaInfo) (*BaseRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InertOne not implemented")
+}
+func (UnimplementedFileServerServer) DeleteOne(context.Context, *FileMetaInfo) (*BaseRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteOne not implemented")
 }
 func (UnimplementedFileServerServer) mustEmbedUnimplementedFileServerServer() {}
 
@@ -120,6 +148,42 @@ func _FileServer_QueryFiles_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FileServer_InertOne_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FileMetaInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileServerServer).InertOne(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.fileServer/InertOne",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileServerServer).InertOne(ctx, req.(*FileMetaInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FileServer_DeleteOne_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FileMetaInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileServerServer).DeleteOne(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.fileServer/DeleteOne",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileServerServer).DeleteOne(ctx, req.(*FileMetaInfo))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FileServer_ServiceDesc is the grpc.ServiceDesc for FileServer service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +198,14 @@ var FileServer_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "QueryFiles",
 			Handler:    _FileServer_QueryFiles_Handler,
+		},
+		{
+			MethodName: "InertOne",
+			Handler:    _FileServer_InertOne_Handler,
+		},
+		{
+			MethodName: "DeleteOne",
+			Handler:    _FileServer_DeleteOne_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

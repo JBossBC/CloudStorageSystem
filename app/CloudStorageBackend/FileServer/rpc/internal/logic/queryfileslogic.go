@@ -34,6 +34,7 @@ func (l *QueryFilesLogic) QueryFiles(in *pb.QueryFileReq) (*pb.QueryFileRes, err
 		return nil, err
 	}
 	return &pb.QueryFileRes{
-		List: pb.GetFileMetaList(query),
+		Result: &pb.BaseRes{Result: "true", Message: "处理成功"},
+		List:   pb.GetFileMetaList(query),
 	}, nil
 }

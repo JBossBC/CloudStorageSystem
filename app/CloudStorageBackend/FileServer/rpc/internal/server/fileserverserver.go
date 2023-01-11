@@ -5,6 +5,7 @@ package server
 
 import (
 	"context"
+
 	"fileServer/rpc/internal/logic"
 	"fileServer/rpc/internal/svc"
 	"fileServer/rpc/pb"
@@ -29,4 +30,14 @@ func (s *FileServerServer) FindOne(ctx context.Context, in *pb.FindFileReq) (*pb
 func (s *FileServerServer) QueryFiles(ctx context.Context, in *pb.QueryFileReq) (*pb.QueryFileRes, error) {
 	l := logic.NewQueryFilesLogic(ctx, s.svcCtx)
 	return l.QueryFiles(in)
+}
+
+func (s *FileServerServer) InertOne(ctx context.Context, in *pb.FileMetaInfo) (*pb.BaseRes, error) {
+	l := logic.NewInertOneLogic(ctx, s.svcCtx)
+	return l.InertOne(in)
+}
+
+func (s *FileServerServer) DeleteOne(ctx context.Context, in *pb.FileMetaInfo) (*pb.BaseRes, error) {
+	l := logic.NewDeleteOneLogic(ctx, s.svcCtx)
+	return l.DeleteOne(in)
 }

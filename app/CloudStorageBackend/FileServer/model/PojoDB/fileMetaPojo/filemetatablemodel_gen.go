@@ -43,6 +43,7 @@ type (
 		Creator     string       `db:"creator"`
 		CreateGroup string       `db:"createGroup"`
 		Name        string       `db:"name"`
+		Description string       `db:"description"`
 		CreateTime  time.Time    `db:"create_time"`
 		Authority   string       `db:"authority"`
 		TypeOf      string       `db:"typeOf"`

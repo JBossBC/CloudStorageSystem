@@ -26,14 +26,14 @@ func NewGetFileInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetFi
 
 func (l *GetFileInfoLogic) GetFileInfo(req *types.FindReq) (resp *types.BaseResponse, err error) {
 	// todo: add your logic here and delete this line
-	resp = &types.BaseResponse{}
+	resp = types.NewDefaultRes()
 	defer func() {
 		if err := recover(); err != nil {
 			logx.Error(err)
 			resp.GetFailedRep("参数类型不匹配")
 		}
 	}()
-	owner, ok := req.MetaInfo["owner"].(string)
+	owner, ok := req.MetaInfo["creator"].(string)
 	if !ok {
 		resp.GetFailedRep("未指定用户")
 		return resp, err
@@ -54,6 +54,6 @@ func (l *GetFileInfoLogic) GetFileInfo(req *types.FindReq) (resp *types.BaseResp
 		resp.GetFailedRep("系统出错")
 		return resp, err
 	}
-	resp.GetSuccessRep(meta)
+	resp.AddData(meta)
 	return resp, err
 }

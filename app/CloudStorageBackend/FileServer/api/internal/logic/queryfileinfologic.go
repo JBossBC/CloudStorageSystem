@@ -26,14 +26,14 @@ func NewQueryFileInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Que
 
 func (l *QueryFileInfoLogic) QueryFileInfo(req *types.QueryReq) (resp *types.BaseResponse, err error) {
 	// todo: add your logic here and delete this line
-	resp = &types.BaseResponse{}
+	resp = types.NewDefaultRes()
 	defer func() {
 		if err := recover(); err != nil {
 			logx.Error(err)
 			resp.GetFailedRep("系统出错")
 		}
 	}()
-	owner, ok := req.MetaInfo["owner"].(string)
+	owner, ok := req.MetaInfo["creator"].(string)
 	if !ok {
 		resp.GetFailedRep("请指定用户")
 		return resp, err
@@ -49,6 +49,6 @@ func (l *QueryFileInfoLogic) QueryFileInfo(req *types.QueryReq) (resp *types.Bas
 		logx.Error(err)
 		return resp, err
 	}
-	resp.GetSuccessRep(list)
+	resp.AddData(list)
 	return resp, err
 }

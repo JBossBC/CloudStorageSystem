@@ -2,9 +2,9 @@
 package handler
 
 import (
-	"fileServer/api/internal/svc"
 	"net/http"
 
+	"fileServer/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )
@@ -31,6 +31,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/api/file/query",
 				Handler: queryFileInfoHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/api/file/delete",
+				Handler: deleteFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/api/file/update",
+				Handler: updateFileHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),

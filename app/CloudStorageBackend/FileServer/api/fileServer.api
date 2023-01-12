@@ -16,9 +16,9 @@ the metaInfo regulations:(map[string]interface)
 **/
 type (
 	baseResponse {
-		Result  string                 `json:"result"`
-		Message string                 `json:"message"`
-		Data    interface `json:"data"`
+		Result  string      `json:"result"`
+		Message string      `json:"message"`
+		Data    interface{} `json:"data"`
 	}
 	uploadReq {
 		MetaInfo map[string]interface{} `json:"metaInfo"`
@@ -53,4 +53,8 @@ service file-api {
 	@doc "queryFileInfo"
 	@handler queryFileInfo
 	get /api/file/query(queryReq)returns(baseResponse)
+	@handler deleteFile
+	get /api/file/delete(findReq)returns(baseResponse)
+	@handler updateFile
+	get /api/file/update(findReq)returns(baseResponse)
 }

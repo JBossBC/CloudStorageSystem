@@ -14,6 +14,7 @@ message FileMetaInfo{
   int64 size=8;
   bool   isDir=9;
   string delete_time=10;
+  string description=11;
 }
 
 message FindFileReq{

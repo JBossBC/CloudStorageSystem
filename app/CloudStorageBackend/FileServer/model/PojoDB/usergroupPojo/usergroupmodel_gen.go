@@ -76,9 +76,10 @@ func (m *defaultUsergroupModel) FindOne(ctx context.Context, groupName string, u
 	}
 }
 
-//TODO should overwritted
+//TODO need the query method
+
 func (m *defaultUsergroupModel) Insert(ctx context.Context, data *Usergroup) (sql.Result, error) {
-	cloudstoragesystemUsergroupGroupNameKey := fmt.Sprintf("%s%v", cacheCloudstoragesystemUsergroupGroupNamePrefix, data.GroupName)
+	cloudstoragesystemUsergroupGroupNameKey := fmt.Sprintf("%s%v%v", cacheCloudstoragesystemUsergroupGroupNamePrefix, data.GroupName, data.UserName)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?)", m.table, usergroupRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.GroupName, data.UserName)
@@ -86,12 +87,11 @@ func (m *defaultUsergroupModel) Insert(ctx context.Context, data *Usergroup) (sq
 	return ret, err
 }
 
-//TODO should overwritted
 func (m *defaultUsergroupModel) Update(ctx context.Context, data *Usergroup) error {
-	cloudstoragesystemUsergroupGroupNameKey := fmt.Sprintf("%s%v", cacheCloudstoragesystemUsergroupGroupNamePrefix, data.GroupName)
+	cloudstoragesystemUsergroupGroupNameKey := fmt.Sprintf("%s%v%v", cacheCloudstoragesystemUsergroupGroupNamePrefix, data.GroupName, data.UserName)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("update %s set %s where `groupName` = ?", m.table, usergroupRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.UserName, data.GroupName)
+		query := fmt.Sprintf("update %s set %s where `groupName` = ? and `userName` = ?  ", m.table, usergroupRowsWithPlaceHolder)
+		return conn.ExecCtx(ctx, query, data.UserName, data.GroupName, data.UserName)
 	}, cloudstoragesystemUsergroupGroupNameKey)
 	return err
 }

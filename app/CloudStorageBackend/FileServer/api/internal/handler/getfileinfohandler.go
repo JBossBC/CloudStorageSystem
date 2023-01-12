@@ -4,7 +4,6 @@ import (
 	"fileServer/api/internal/logic"
 	"fileServer/api/internal/svc"
 	"fileServer/api/internal/types"
-	"fmt"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
@@ -17,7 +16,6 @@ func getFileInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.Error(w, err)
 			return
 		}
-		fmt.Println(r.Context().Value("userId"))
 		l := logic.NewGetFileInfoLogic(r.Context(), svcCtx)
 		resp, err := l.GetFileInfo(&req)
 		if err != nil {

@@ -30,7 +30,7 @@ type (
 		Insert(ctx context.Context, data *Filemetatable) (sql.Result, error)
 		FindOne(ctx context.Context, creator string, name string) (*Filemetatable, error)
 		Update(ctx context.Context, data *Filemetatable) error
-		Delete(ctx context.Context, creator string) error
+		Delete(ctx context.Context, creator string, name string) error
 		Query(ctx context.Context, creator string) ([]*Filemetatable, error)
 	}
 
@@ -61,17 +61,17 @@ func newFilemetatableModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultFilemet
 	}
 }
 
-func (m *defaultFilemetatableModel) Delete(ctx context.Context, creator string) error {
-	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, creator)
+func (m *defaultFilemetatableModel) Delete(ctx context.Context, creator string, name string) error {
+	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, creator, name)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("delete from %s where `creator` = ?", m.table)
-		return conn.ExecCtx(ctx, query, creator)
+		query := fmt.Sprintf("delete from %s where `creator` = ? and `name`= ? ", m.table)
+		return conn.ExecCtx(ctx, query, creator, name)
 	}, cloudStorageSystemFilemetatableCreatorKey)
 	return err
 }
 
 func (m *defaultFilemetatableModel) FindOne(ctx context.Context, creator string, name string) (*Filemetatable, error) {
-	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, creator)
+	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, creator, name)
 	var resp Filemetatable
 	err := m.QueryRowCtx(ctx, &resp, cloudStorageSystemFilemetatableCreatorKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
 		query := fmt.Sprintf("select %s from %s where `creator` = ? and 'name'= ? limit 1", filemetatableRows, m.table)
@@ -100,7 +100,7 @@ func (m *defaultFilemetatableModel) Query(ctx context.Context, creator string) (
 }
 
 func (m *defaultFilemetatableModel) Insert(ctx context.Context, data *Filemetatable) (sql.Result, error) {
-	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, data.Creator)
+	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, data.Creator, data.Name)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, filemetatableRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.Creator, data.CreateGroup, data.Name, data.Authority, data.TypeOf, data.Size, data.IsDir, data.DeleteTime)
@@ -109,7 +109,7 @@ func (m *defaultFilemetatableModel) Insert(ctx context.Context, data *Filemetata
 }
 
 func (m *defaultFilemetatableModel) Update(ctx context.Context, data *Filemetatable) error {
-	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, data.Creator)
+	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, data.Creator, data.Name)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `creator` = ?", m.table, filemetatableRowsWithPlaceHolder)
 		return conn.ExecCtx(ctx, query, data.CreateGroup, data.Name, data.Authority, data.TypeOf, data.Size, data.IsDir, data.DeleteTime, data.Creator)

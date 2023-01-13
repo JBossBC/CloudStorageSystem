@@ -30,7 +30,9 @@ EXPOSE 8889
 CMD ["./file"]
 
 
+
 FROM scratch AS fileserverrpc
+
 ENV TZ Asia/shanghai
 
 RUN mkdir -p /app/fileServer/api

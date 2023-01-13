@@ -1,6 +1,4 @@
-
 version: "3"
-
 services:
   fileserver:
     image: jiangxiyang/fileserver:1.0
@@ -9,3 +7,10 @@ services:
     hostname: fileserver
     networks:
       - cloudStorageSystem
+      
+networks:
+  cloudStorageSystem:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16      

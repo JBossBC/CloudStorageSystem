@@ -1,42 +1,41 @@
+FROM golang:alpine AS builder
 
-#FROM golang:alpine AS builder
-#
-#ENV CGO_ENABLED 0
-#ENV GOPROXY https://goproxy.cn,direct
-#
-#
-#WORKDIR /build
-#
-#ADD go.mod .
-#ADD go.sum .
-#RUN go mod download
-#COPY . .
-#RUN mkdir -p /app/fileServer
-#RUN go build -ldflags="-s -w" -o /app/fileServer/api  ./api/file.go
-#RUN go build -ldflags="-s -w" -o /app/fileServer/rpc  ./rpc/fileserver.go
-#
-#
-#
-#FROM scratch AS fileserverapi
-#
-#ENV TZ Asia/Shanghai
-#
-#RUN mkdir -p /app/fileServer/api
-#WORKDIR /app/fileServer/api
-#
-#COPY --from=builder /app/fileServer/api /app/fileServer/api
-#
-#EXPOSE 8889
-#
-#CMD ["./file"]
-#
-#
-#FROM scratch AS fileserverrpc
-#ENV TZ Asia/shanghai
-#
-#RUN mkdir -p /app/fileServer/api
-#WORKDIR /app/fileServer/api
-#COPY --from=builder /app/fileServer/rpc /app/fileServer/rpc
-#EXPOSE 8001
-#CMD ["./fileserver"]
-#
+ENV CGO_ENABLED 0
+ENV GOPROXY https://goproxy.cn,direct
+
+
+WORKDIR /build
+
+ADD go.mod .
+ADD go.sum .
+RUN go mod download
+COPY . .
+RUN mkdir -p /app/fileServer/etc
+COPY rpc/etc  /app/fileServer/etc
+COPY api/etc  /app/fileServer/etc
+RUN go build -ldflags="-s -w" -o /app/fileServer/api  ./api/file.go
+RUN go build -ldflags="-s -w" -o /app/fileServer/rpc  ./rpc/fileserver.go
+
+
+
+FROM scratch AS fileserverapi
+
+ENV TZ Asia/Shanghai
+
+WORKDIR /app
+COPY --from=builder /app/etc/fileserver.yaml /app/fileServer/etc/fileserver.yaml
+COPY --from=builder /app/api /app/fileServer/api
+
+EXPOSE 8889
+CMD ["./api","-f","/app/etc/fileserver.yaml"]
+
+
+FROM scratch AS fileserverrpc
+ENV TZ Asia/shanghai
+
+WORKDIR /app
+COPY --from=builder /app/etc/file-api.yaml /app/fileServer/etc/file-api.yaml
+COPY --from=builder /app/rpc /app/fileServer/rpc
+EXPOSE 8001
+CMD ["./rpc","-f","file-api.yaml"]
+

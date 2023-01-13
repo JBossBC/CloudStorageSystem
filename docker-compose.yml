@@ -1,0 +1,11 @@
+
+version: "3"
+
+services:
+  fileserver:
+    image: jiangxiyang/fileserver:1.0
+    container_name: fileserver
+    restart: always
+    hostname: fileserver
+    networks:
+      - cloudStorageSystem

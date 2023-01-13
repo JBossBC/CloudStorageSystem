@@ -16,23 +16,26 @@ RUN go build -ldflags="-s -w" -o /app/fileServer/rpc  ./rpc/fileserver.go
 
 
 
-FROM scratch
+FROM scratch AS fileserverapi
 
 ENV TZ Asia/Shanghai
 
-WORKDIR /app
+RUN mkdir -p /app/fileServer/api
+WORKDIR /app/fileServer/api
 
 COPY --from=builder /app/fileServer/api /app/fileServer/api
 
 EXPOSE 8889
 
-CMD ["./fileServer/api/file"]
+CMD ["./file"]
 
 
-FROM scratch
+FROM scratch AS fileserverrpc
 ENV TZ Asia/shanghai
-WORKDIR /app
+
+RUN mkdir -p /app/fileServer/api
+WORKDIR /app/fileServer/api
 COPY --from=builder /app/fileServer/rpc /app/fileServer/rpc
 EXPOSE 8001
-CMD ["./fileServer/rpc/fileserver"]
+CMD ["./fileserver"]
 

@@ -22,10 +22,17 @@ ENV TZ Asia/Shanghai
 
 WORKDIR /app
 
-COPY --from=builder /app/fileServer /app/fileServer
+COPY --from=builder /app/fileServer/api /app/fileServer/api
 
-EXPOSE 8001
 EXPOSE 8889
 
 CMD ["./fileServer/api/file"]
-CMD ["./fileServer/rpc/fileServer"]
+
+
+FROM scratch
+ENV TZ Asia/shanghai
+WORKDIR /app
+COPY --from=builder /app/fileServer/rpc /app/fileServer/rpc
+EXPOSE 8001
+CMD ["./fileServer/rpc/fileserver"]
+

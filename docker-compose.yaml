@@ -5,6 +5,9 @@ services:
     container_name: fileserver
     restart: always
     hostname: fileserver
+    ports:
+      - "8001:8001"
+      -  "8889:8889"
     networks:
       - cloudStorageSystem
       

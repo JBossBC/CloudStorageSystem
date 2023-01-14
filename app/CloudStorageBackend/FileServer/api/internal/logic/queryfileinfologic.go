@@ -47,6 +47,7 @@ func (l *QueryFileInfoLogic) QueryFileInfo(req *types.QueryReq) (resp *types.Bas
 	list, err := util.ConvertRpcFileMetaList(files.List)
 	if err != nil {
 		logx.Error(err)
+		resp.GetFailedRep("系统出错")
 		return resp, err
 	}
 	resp.AddData(list)

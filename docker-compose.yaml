@@ -1,13 +1,24 @@
 version: "3"
 services:
-  fileserver:
-    image: jiangxiyang/fileserver:1.0
-    container_name: fileserver
+  fileserverrpc:
+     image: jiangxiyang/fileserverrpc:1.0
+     container_name: fileserverrpc
+     restart: always
+     hostname: fileserverrpc
+     ports:
+     - "8001:8001"
+     networks:
+     - cloudStorageSystem
+
+  fileserverapi:
+    image: jiangxiyang/fileserverapi:1.0
+    container_name: fileserverapi
     restart: always
-    hostname: fileserver
+    hostname: fileserverapi
     ports:
-      - "8001:8001"
       - "8889:8889"
+    depends_on:
+      - fileserverrpc
     networks:
       - cloudStorageSystem
       

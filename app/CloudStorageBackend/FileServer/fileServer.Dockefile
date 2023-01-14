@@ -38,5 +38,5 @@ WORKDIR /app
 COPY --from=builder  /app/fileServer/etc/fileserver.yaml  /app/fileserver.yaml 
 COPY --from=builder  /app/fileServer/rpc  /app/rpc
 EXPOSE 8001
-CMD ["./rpc","-f","fileserver.yaml "]
+CMD ["./rpc","-f","fileserver.yaml"]
 

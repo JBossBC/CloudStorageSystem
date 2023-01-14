@@ -11,10 +11,12 @@ ADD go.sum .
 RUN go mod download
 COPY . .
 RUN mkdir -p /app/fileServer/etc
-COPY rpc/etc  /app/fileServer/etc
-COPY api/etc  /app/fileServer/etc
-RUN go build -ldflags="-s -w" -o /app/fileServer/api  ./api/file.go
-RUN go build -ldflags="-s -w" -o /app/fileServer/rpc  ./rpc/fileserver.go
+COPY rpc/etc/fileserver.yaml   /app/fileServer/etc
+COPY api/etc/file-api.yaml /app/fileServer/etc
+WORKDIR /build/api
+RUN go build -ldflags="-s -w" -o /app/fileServer/api  ./file.go
+WORKDIR /build/rpc
+RUN go build -ldflags="-s -w" -o /app/fileServer/rpc  ./fileserver.go
 
 
 
@@ -23,19 +25,18 @@ FROM scratch AS fileserverapi
 ENV TZ Asia/Shanghai
 
 WORKDIR /app
-COPY --from=builder /app/etc/fileserver.yaml /app/fileServer/etc/fileserver.yaml
-COPY --from=builder /app/api /app/fileServer/api
-
+COPY --from=builder /app/fileServer/etc/file-api.yaml /app/fileserver.yaml
+COPY --from=builder /app/fileServer/api /app/api
 EXPOSE 8889
-CMD ["./api","-f","/app/etc/fileserver.yaml"]
+CMD ["./api","-f","file-api.yaml"]
 
 
 FROM scratch AS fileserverrpc
 ENV TZ Asia/shanghai
 
 WORKDIR /app
-COPY --from=builder /app/etc/file-api.yaml /app/fileServer/etc/file-api.yaml
-COPY --from=builder /app/rpc /app/fileServer/rpc
+COPY --from=builder  /app/fileServer/etc/fileserver.yaml  /app/file-api.yaml
+COPY --from=builder  /app/fileServer/rpc  /app/rpc
 EXPOSE 8001
-CMD ["./rpc","-f","file-api.yaml"]
+CMD ["./rpc","-f","fileserver.yaml "]
 

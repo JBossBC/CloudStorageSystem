@@ -25,7 +25,7 @@ FROM scratch AS fileserverapi
 ENV TZ Asia/Shanghai
 
 WORKDIR /app
-COPY --from=builder /app/fileServer/etc/file-api.yaml /app/fileserver.yaml
+COPY --from=builder /app/fileServer/etc/file-api.yaml /app/file-api.yaml
 COPY --from=builder /app/fileServer/api /app/api
 EXPOSE 8889
 CMD ["./api","-f","file-api.yaml"]
@@ -35,7 +35,7 @@ FROM scratch AS fileserverrpc
 ENV TZ Asia/shanghai
 
 WORKDIR /app
-COPY --from=builder  /app/fileServer/etc/fileserver.yaml  /app/file-api.yaml
+COPY --from=builder  /app/fileServer/etc/fileserver.yaml  /app/fileserver.yaml 
 COPY --from=builder  /app/fileServer/rpc  /app/rpc
 EXPOSE 8001
 CMD ["./rpc","-f","fileserver.yaml "]

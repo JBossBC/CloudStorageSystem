@@ -6,6 +6,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/zeromicro/go-zero/core/logx"
 	"strings"
 	"time"
 
@@ -32,6 +33,7 @@ type (
 		Update(ctx context.Context, data *Filemetatable) error
 		Delete(ctx context.Context, creator string, name string) error
 		Query(ctx context.Context, creator string) ([]*Filemetatable, error)
+		DeleteHard(ctx context.Context, timeInt time.Time) error
 	}
 
 	defaultFilemetatableModel struct {
@@ -98,7 +100,31 @@ func (m *defaultFilemetatableModel) Query(ctx context.Context, creator string) (
 		return nil, err
 	}
 }
-
+func (m *defaultFilemetatableModel) DeleteHard(ctx context.Context, timeInt time.Time) error {
+	err := m.CachedConn.TransactCtx(ctx, func(ctx context.Context, session sqlx.Session) error {
+		var resp []*Filemetatable
+		err := session.QueryRowsCtx(ctx, &resp, fmt.Sprintf("select %s from %s where `delete_time` < \"%s\" for update", filemetatableRows, m.table, timeInt))
+		if err != nil {
+			if err == sqlc.ErrNotFound {
+				return nil
+			}
+			return err
+		}
+		for _, value := range resp {
+			_, err := session.ExecCtx(ctx, fmt.Sprintf("delete from %s where 'creator'= %s and 'name' = %s ", m.table, value.Creator, value.Name))
+			if err != nil {
+				fmt.Printf("delete hard the filemeta info error:%v", err)
+				return err
+			}
+			logx.Info(fmt.Sprintf("successful delete hard the filemetinfo------> creator:%s , filename:%s", value.Creator, value.Name))
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
 func (m *defaultFilemetatableModel) Insert(ctx context.Context, data *Filemetatable) (sql.Result, error) {
 	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, data.Creator, data.Name)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {

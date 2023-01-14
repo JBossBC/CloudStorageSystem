@@ -29,6 +29,10 @@ message QueryFileRes{
     repeated FileMetaInfo list=2;
 }
 
+message baseTime{
+   string Date=1;
+}
+
 message baseRes{
   string result=1;
   string message=2;
@@ -38,4 +42,5 @@ service fileServer{
   rpc QueryFiles(QueryFileReq)returns(QueryFileRes);
   rpc InertOne(FileMetaInfo)returns(baseRes);
   rpc DeleteOne(FileMetaInfo)returns(baseRes);
+  rpc DeleteHard(baseTime)returns(baseRes);
 }

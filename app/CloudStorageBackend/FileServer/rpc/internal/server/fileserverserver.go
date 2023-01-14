@@ -41,3 +41,8 @@ func (s *FileServerServer) DeleteOne(ctx context.Context, in *pb.FileMetaInfo) (
 	l := logic.NewDeleteOneLogic(ctx, s.svcCtx)
 	return l.DeleteOne(in)
 }
+
+func (s *FileServerServer) DeleteHard(ctx context.Context, in *pb.BaseTime) (*pb.BaseRes, error) {
+	l := logic.NewDeleteHardLogic(ctx, s.svcCtx)
+	return l.DeleteHard(in)
+}

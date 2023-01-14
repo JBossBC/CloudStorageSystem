@@ -18,7 +18,7 @@
 |asynq|0.24.0|
 |zookeeper|3.8.0|
 |kafka|3.3.1|
-|nginx|stable version|
+|nginx|1.21.5|
 |docker|20.10.21|
 |docker-compose|2.13.0|
 |kubernetes|暂定|

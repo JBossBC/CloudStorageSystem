@@ -26,6 +26,7 @@ type FileServerClient interface {
 	QueryFiles(ctx context.Context, in *QueryFileReq, opts ...grpc.CallOption) (*QueryFileRes, error)
 	InertOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error)
 	DeleteOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error)
+	DeleteHard(ctx context.Context, in *BaseTime, opts ...grpc.CallOption) (*BaseRes, error)
 }
 
 type fileServerClient struct {
@@ -72,6 +73,15 @@ func (c *fileServerClient) DeleteOne(ctx context.Context, in *FileMetaInfo, opts
 	return out, nil
 }
 
+func (c *fileServerClient) DeleteHard(ctx context.Context, in *BaseTime, opts ...grpc.CallOption) (*BaseRes, error) {
+	out := new(BaseRes)
+	err := c.cc.Invoke(ctx, "/pb.fileServer/DeleteHard", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FileServerServer is the server API for FileServer service.
 // All implementations must embed UnimplementedFileServerServer
 // for forward compatibility
@@ -80,6 +90,7 @@ type FileServerServer interface {
 	QueryFiles(context.Context, *QueryFileReq) (*QueryFileRes, error)
 	InertOne(context.Context, *FileMetaInfo) (*BaseRes, error)
 	DeleteOne(context.Context, *FileMetaInfo) (*BaseRes, error)
+	DeleteHard(context.Context, *BaseTime) (*BaseRes, error)
 	mustEmbedUnimplementedFileServerServer()
 }
 
@@ -98,6 +109,9 @@ func (UnimplementedFileServerServer) InertOne(context.Context, *FileMetaInfo) (*
 }
 func (UnimplementedFileServerServer) DeleteOne(context.Context, *FileMetaInfo) (*BaseRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteOne not implemented")
+}
+func (UnimplementedFileServerServer) DeleteHard(context.Context, *BaseTime) (*BaseRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteHard not implemented")
 }
 func (UnimplementedFileServerServer) mustEmbedUnimplementedFileServerServer() {}
 
@@ -184,6 +198,24 @@ func _FileServer_DeleteOne_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FileServer_DeleteHard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BaseTime)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileServerServer).DeleteHard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.fileServer/DeleteHard",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileServerServer).DeleteHard(ctx, req.(*BaseTime))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FileServer_ServiceDesc is the grpc.ServiceDesc for FileServer service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -206,6 +238,10 @@ var FileServer_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteOne",
 			Handler:    _FileServer_DeleteOne_Handler,
+		},
+		{
+			MethodName: "DeleteHard",
+			Handler:    _FileServer_DeleteHard_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

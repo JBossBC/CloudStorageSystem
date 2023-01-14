@@ -1,5 +1,21 @@
 version: "3"
 services:
+  nginx-gateway:
+    image: nginx:1.21.5
+    container_name: nginx_gateway
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - 8888:8081
+    volumes:
+      - ./deploy/nginx/conf.d:/etc/nginx/conf.d
+      - ./data/nginx/log:/var/log/nginx
+    networks:
+      - cloudStorageSystem
+    depends_on:
+      - fileserverapi
   fileserverrpc:
      image: jiangxiyang/fileserverrpc:1.0
      container_name: fileserverrpc

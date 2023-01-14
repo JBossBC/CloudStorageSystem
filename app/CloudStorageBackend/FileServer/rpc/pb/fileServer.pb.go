@@ -7,14 +7,10 @@
 package pb
 
 import (
-	"errors"
-	"fileServer/model/PojoDB/fileMetaPojo"
-	"fmt"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
-	"time"
 )
 
 const (
@@ -41,81 +37,6 @@ type FileMetaInfo struct {
 	DeleteTime  string `protobuf:"bytes,10,opt,name=delete_time,json=deleteTime,proto3" json:"delete_time,omitempty"`
 	Description string `protobuf:"bytes,11,opt,name=description,proto3" json:"description,omitempty"`
 }
-func ConvertFileMetaInfo(filemeta *FileMetaInfo)(result *fileMetaPojo.Filemetatable,err error){
-	var createTime,updateTime,deleteTime time.Time
-	createStr:=filemeta.CreateTime
-	updateStr:=filemeta.UpdateTime
-	deleteStr:=filemeta.DeleteTime
-	if createStr!="" {
-		createTime, err = time.Parse(time.RFC850, createStr)
-		if err!=nil{
-			return nil,errors.New(fmt.Sprintf("convert error:%s",createStr))
-		}
-	}
-	if updateStr!="" {
-		updateTime, err = time.Parse(time.RFC850, updateStr)
-		if err!=nil{
-			return nil,errors.New(fmt.Sprintf("convert error:%s",updateStr))
-		}
-	}
-	if deleteStr!=""{
-		deleteTime,err=time.Parse(time.RFC850,deleteStr)
-		if err!=nil{
-			return nil,errors.New(fmt.Sprintf("convert error:%s",deleteStr))
-		}
-	}
-	isDirInt:=0
-	if filemeta.IsDir{
-		isDirInt=1
-	}
-	deleteTime,err=time.Parse(time.RFC850,filemeta.DeleteTime)
-	result=&fileMetaPojo.Filemetatable{
-		Creator:     filemeta.Creator,
-		CreateGroup: filemeta.CreateGroup,
-		Name:        filemeta.Name,
-		CreateTime:  createTime,
-		Authority:   filemeta.Authority,
-		TypeOf:      filemeta.TypeOf,
-		UpdateTime:  updateTime,
-		Size:        filemeta.Size,
-		IsDir:       isDirInt,
-		Description:  filemeta.Description,
-	}
-	result.DeleteTime.Time=deleteTime
-	return result,err
-}
-func GetFileMetaInfo(filemetatable *fileMetaPojo.Filemetatable)(result *FileMetaInfo){
-	result=&FileMetaInfo{
-
-		Creator:       filemetatable.Creator,
-		CreateGroup:   filemetatable.CreateGroup,
-		Name:          filemetatable.Name,
-		CreateTime:    filemetatable.CreateTime.String(),
-		Authority:     filemetatable.Authority,
-		TypeOf:        filemetatable.TypeOf,
-		UpdateTime:    filemetatable.UpdateTime.String(),
-		Size:          filemetatable.Size,
-		Description:  filemetatable.Description,
-	}
-	if filemetatable.IsDir==0{
-		result.IsDir=true
-	}else{
-		result.IsDir=false
-	}
-	deleteTime:=filemetatable.DeleteTime
-	if(deleteTime.Valid){
-		result.DeleteTime=deleteTime.Time.String()
-	}
-	return result
-}
-func GetFileMetaList(filemetatable []*fileMetaPojo.Filemetatable)(result []*FileMetaInfo){
-	result=make([]*FileMetaInfo, len(filemetatable))
-	for index,value:=range filemetatable {
-		result[index]=GetFileMetaInfo(value)
-	}
-	return result
-}
-
 
 func (x *FileMetaInfo) Reset() {
 	*x = FileMetaInfo{}
@@ -383,6 +304,53 @@ func (x *QueryFileRes) GetList() []*FileMetaInfo {
 	return nil
 }
 
+type BaseTime struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Date string `protobuf:"bytes,1,opt,name=Date,proto3" json:"Date,omitempty"`
+}
+
+func (x *BaseTime) Reset() {
+	*x = BaseTime{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_pb_fileServer_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BaseTime) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BaseTime) ProtoMessage() {}
+
+func (x *BaseTime) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_fileServer_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BaseTime.ProtoReflect.Descriptor instead.
+func (*BaseTime) Descriptor() ([]byte, []int) {
+	return file_pb_fileServer_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *BaseTime) GetDate() string {
+	if x != nil {
+		return x.Date
+	}
+	return ""
+}
+
 type BaseRes struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -391,20 +359,11 @@ type BaseRes struct {
 	Result  string `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
 	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 }
-//原型模式
-func NewDefaultBaseRes()*BaseRes{
-	return &BaseRes{Result:"true" ,Message: "处理成功"}
-}
-
-func (br *BaseRes)GetFailedRes(message string){
-	br.Result="false";
-	br.Message=message;
-}
 
 func (x *BaseRes) Reset() {
 	*x = BaseRes{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_pb_fileServer_proto_msgTypes[4]
+		mi := &file_pb_fileServer_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -417,7 +376,7 @@ func (x *BaseRes) String() string {
 func (*BaseRes) ProtoMessage() {}
 
 func (x *BaseRes) ProtoReflect() protoreflect.Message {
-	mi := &file_pb_fileServer_proto_msgTypes[4]
+	mi := &file_pb_fileServer_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -430,7 +389,7 @@ func (x *BaseRes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseRes.ProtoReflect.Descriptor instead.
 func (*BaseRes) Descriptor() ([]byte, []int) {
-	return file_pb_fileServer_proto_rawDescGZIP(), []int{4}
+	return file_pb_fileServer_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *BaseRes) GetResult() string {
@@ -483,11 +442,13 @@ var file_pb_fileServer_proto_rawDesc = []byte{
 	0x2e, 0x70, 0x62, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x52, 0x65, 0x73, 0x52, 0x06, 0x72, 0x65, 0x73,
 	0x75, 0x6c, 0x74, 0x12, 0x24, 0x0a, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28,
 	0x0b, 0x32, 0x10, 0x2e, 0x70, 0x62, 0x2e, 0x46, 0x69, 0x6c, 0x65, 0x4d, 0x65, 0x74, 0x61, 0x49,
-	0x6e, 0x66, 0x6f, 0x52, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x22, 0x3b, 0x0a, 0x07, 0x62, 0x61, 0x73,
+	0x6e, 0x66, 0x6f, 0x52, 0x04, 0x6c, 0x69, 0x73, 0x74, 0x22, 0x1e, 0x0a, 0x08, 0x62, 0x61, 0x73,
+	0x65, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x44, 0x61, 0x74, 0x65, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x04, 0x44, 0x61, 0x74, 0x65, 0x22, 0x3b, 0x0a, 0x07, 0x62, 0x61, 0x73,
 	0x65, 0x52, 0x65, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x18, 0x0a, 0x07,
 	0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d,
-	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0xc3, 0x01, 0x0a, 0x0a, 0x66, 0x69, 0x6c, 0x65, 0x53,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0xec, 0x01, 0x0a, 0x0a, 0x66, 0x69, 0x6c, 0x65, 0x53,
 	0x65, 0x72, 0x76, 0x65, 0x72, 0x12, 0x2c, 0x0a, 0x07, 0x46, 0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65,
 	0x12, 0x0f, 0x2e, 0x70, 0x62, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x46, 0x69, 0x6c, 0x65, 0x52, 0x65,
 	0x71, 0x1a, 0x10, 0x2e, 0x70, 0x62, 0x2e, 0x46, 0x69, 0x6c, 0x65, 0x4d, 0x65, 0x74, 0x61, 0x49,
@@ -499,8 +460,11 @@ var file_pb_fileServer_proto_rawDesc = []byte{
 	0x6e, 0x66, 0x6f, 0x1a, 0x0b, 0x2e, 0x70, 0x62, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x52, 0x65, 0x73,
 	0x12, 0x2a, 0x0a, 0x09, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x4f, 0x6e, 0x65, 0x12, 0x10, 0x2e,
 	0x70, 0x62, 0x2e, 0x46, 0x69, 0x6c, 0x65, 0x4d, 0x65, 0x74, 0x61, 0x49, 0x6e, 0x66, 0x6f, 0x1a,
-	0x0b, 0x2e, 0x70, 0x62, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x52, 0x65, 0x73, 0x42, 0x06, 0x5a, 0x04,
-	0x2e, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x0b, 0x2e, 0x70, 0x62, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x52, 0x65, 0x73, 0x12, 0x27, 0x0a, 0x0a,
+	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x48, 0x61, 0x72, 0x64, 0x12, 0x0c, 0x2e, 0x70, 0x62, 0x2e,
+	0x62, 0x61, 0x73, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x1a, 0x0b, 0x2e, 0x70, 0x62, 0x2e, 0x62, 0x61,
+	0x73, 0x65, 0x52, 0x65, 0x73, 0x42, 0x06, 0x5a, 0x04, 0x2e, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -515,27 +479,30 @@ func file_pb_fileServer_proto_rawDescGZIP() []byte {
 	return file_pb_fileServer_proto_rawDescData
 }
 
-var file_pb_fileServer_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_pb_fileServer_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_pb_fileServer_proto_goTypes = []interface{}{
 	(*FileMetaInfo)(nil), // 0: pb.FileMetaInfo
 	(*FindFileReq)(nil),  // 1: pb.FindFileReq
 	(*QueryFileReq)(nil), // 2: pb.QueryFileReq
 	(*QueryFileRes)(nil), // 3: pb.QueryFileRes
-	(*BaseRes)(nil),      // 4: pb.baseRes
+	(*BaseTime)(nil),     // 4: pb.baseTime
+	(*BaseRes)(nil),      // 5: pb.baseRes
 }
 var file_pb_fileServer_proto_depIdxs = []int32{
-	4, // 0: pb.QueryFileRes.result:type_name -> pb.baseRes
+	5, // 0: pb.QueryFileRes.result:type_name -> pb.baseRes
 	0, // 1: pb.QueryFileRes.list:type_name -> pb.FileMetaInfo
 	1, // 2: pb.fileServer.FindOne:input_type -> pb.FindFileReq
 	2, // 3: pb.fileServer.QueryFiles:input_type -> pb.QueryFileReq
 	0, // 4: pb.fileServer.InertOne:input_type -> pb.FileMetaInfo
 	0, // 5: pb.fileServer.DeleteOne:input_type -> pb.FileMetaInfo
-	0, // 6: pb.fileServer.FindOne:output_type -> pb.FileMetaInfo
-	3, // 7: pb.fileServer.QueryFiles:output_type -> pb.QueryFileRes
-	4, // 8: pb.fileServer.InertOne:output_type -> pb.baseRes
-	4, // 9: pb.fileServer.DeleteOne:output_type -> pb.baseRes
-	6, // [6:10] is the sub-list for method output_type
-	2, // [2:6] is the sub-list for method input_type
+	4, // 6: pb.fileServer.DeleteHard:input_type -> pb.baseTime
+	0, // 7: pb.fileServer.FindOne:output_type -> pb.FileMetaInfo
+	3, // 8: pb.fileServer.QueryFiles:output_type -> pb.QueryFileRes
+	5, // 9: pb.fileServer.InertOne:output_type -> pb.baseRes
+	5, // 10: pb.fileServer.DeleteOne:output_type -> pb.baseRes
+	5, // 11: pb.fileServer.DeleteHard:output_type -> pb.baseRes
+	7, // [7:12] is the sub-list for method output_type
+	2, // [2:7] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
@@ -596,6 +563,18 @@ func file_pb_fileServer_proto_init() {
 			}
 		}
 		file_pb_fileServer_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BaseTime); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_pb_fileServer_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*BaseRes); i {
 			case 0:
 				return &v.state
@@ -614,7 +593,7 @@ func file_pb_fileServer_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_pb_fileServer_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

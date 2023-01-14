@@ -14,6 +14,7 @@ import (
 
 type (
 	BaseRes      = pb.BaseRes
+	BaseTime     = pb.BaseTime
 	FileMetaInfo = pb.FileMetaInfo
 	FindFileReq  = pb.FindFileReq
 	QueryFileReq = pb.QueryFileReq
@@ -24,6 +25,7 @@ type (
 		QueryFiles(ctx context.Context, in *QueryFileReq, opts ...grpc.CallOption) (*QueryFileRes, error)
 		InertOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error)
 		DeleteOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error)
+		DeleteHard(ctx context.Context, in *BaseTime, opts ...grpc.CallOption) (*BaseRes, error)
 	}
 
 	defaultFileServer struct {
@@ -55,4 +57,9 @@ func (m *defaultFileServer) InertOne(ctx context.Context, in *FileMetaInfo, opts
 func (m *defaultFileServer) DeleteOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error) {
 	client := pb.NewFileServerClient(m.cli.Conn())
 	return client.DeleteOne(ctx, in, opts...)
+}
+
+func (m *defaultFileServer) DeleteHard(ctx context.Context, in *BaseTime, opts ...grpc.CallOption) (*BaseRes, error) {
+	client := pb.NewFileServerClient(m.cli.Conn())
+	return client.DeleteHard(ctx, in, opts...)
 }

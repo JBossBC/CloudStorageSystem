@@ -1,7 +1,6 @@
 Name: file-api
 Host: 0.0.0.0
 Port: 8889
-Mode: dev
 
 Auth:
   AccessSecret: "cloudstoragesystem"

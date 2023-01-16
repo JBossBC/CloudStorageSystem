@@ -20,13 +20,13 @@ Log:
   Level: error
 
 Redis:
-  Host: redis:6379
+  Host: localhost:6379
   Type: node
   Pass: root
 
 
 FileserverClient:
   Etcd:
-    Hosts: [ etcd:2379 ]
+    Hosts: [ localhost:2379 ]
     Key: fileserver.rpc
 

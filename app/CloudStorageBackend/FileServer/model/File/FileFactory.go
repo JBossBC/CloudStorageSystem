@@ -14,7 +14,11 @@ const (
 	FILE_PROTOCOL  = "file"
 )
 
-var SupportProtocol = map[string]interface{}{HTTP_PROTOCOL: nil, HTTPS_PROTOCOL: nil, FILE_PROTOCOL: nil}
+var SupportProtocol map[string]interface{}
+
+func init() {
+	SupportProtocol = map[string]interface{}{HTTP_PROTOCOL: nil, HTTPS_PROTOCOL: nil, FILE_PROTOCOL: nil}
+}
 
 type fileFactory struct {
 }

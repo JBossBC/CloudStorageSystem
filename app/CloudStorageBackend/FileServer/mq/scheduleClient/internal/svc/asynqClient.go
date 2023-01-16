@@ -15,7 +15,7 @@ func NewAsynqClient(c config.Config) *asynq.Scheduler {
 		}, &asynq.SchedulerOpts{
 			Location: location,
 			EnqueueErrorHandler: func(task *asynq.Task, opts []asynq.Option, err error) {
-				fmt.Printf("Scheduler EnqueueErrorHandler <<<<<<<===>>>>> err : %+v , task : %+v", err, task)
+				fmt.Printf("Scheduler EnqueueErrorHandler err : %+v , task : %+v", err, task)
 			},
 		},
 	)

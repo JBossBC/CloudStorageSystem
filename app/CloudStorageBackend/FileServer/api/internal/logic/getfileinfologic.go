@@ -28,8 +28,8 @@ func (l *GetFileInfoLogic) GetFileInfo(req *types.FindReq) (resp *types.BaseResp
 	// todo: add your logic here and delete this line
 	resp = types.NewDefaultRes()
 	defer func() {
-		if err := recover(); err != nil {
-			logx.Error(err)
+		if errHandler := recover(); errHandler != nil {
+			logx.Error(errHandler)
 			resp.GetFailedRep("参数类型不匹配")
 		}
 	}()

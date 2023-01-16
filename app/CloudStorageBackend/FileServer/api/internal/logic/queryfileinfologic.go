@@ -28,8 +28,8 @@ func (l *QueryFileInfoLogic) QueryFileInfo(req *types.QueryReq) (resp *types.Bas
 	// todo: add your logic here and delete this line
 	resp = types.NewDefaultRes()
 	defer func() {
-		if err := recover(); err != nil {
-			logx.Error(err)
+		if errHandler := recover(); errHandler != nil {
+			logx.Error(errHandler)
 			resp.GetFailedRep("系统出错")
 		}
 	}()

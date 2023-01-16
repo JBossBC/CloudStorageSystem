@@ -2,22 +2,22 @@
 package types
 
 type BaseResponse struct {
-	result  string      `json:"result"`
-	message string      `json:"message"`
-	data    interface{} `json:"data"`
+	Result  string      `json:"result"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
 }
 func NewDefaultRes()*BaseResponse{
 	return &BaseResponse{
-		result: "true",
-		message: "操作成功",
+		Result: "true",
+		Message: "操作成功",
 	}
 }
 func (br *BaseResponse)AddData(data interface{}){
-	br.data=data
+	br.Data=data
 }
 func( br *BaseResponse) GetFailedRep(msg string){
-	br.result= "fail"
-	br.message=msg
+	br.Result= "fail"
+	br.Message=msg
 }
 
 type UploadReq struct {

@@ -3,6 +3,7 @@ package handler
 
 import (
 	"net/http"
+	"time"
 
 	"fileServer/api/internal/svc"
 
@@ -45,5 +46,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 		rest.WithPrefix("/file"),
+		rest.WithTimeout(3*time.Second),
 	)
 }

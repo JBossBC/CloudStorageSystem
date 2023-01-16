@@ -90,7 +90,7 @@ func (m *defaultFilemetatableModel) FindOne(ctx context.Context, creator string,
 }
 func (m *defaultFilemetatableModel) Query(ctx context.Context, creator string) ([]*Filemetatable, error) {
 	var resp []*Filemetatable
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, fmt.Sprintf("select %s from %s where `creator` = \"%s\"", filemetatableRows, m.table, creator))
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, fmt.Sprintf("select %s from %s where `creator` = '%s'", filemetatableRows, m.table, creator))
 	switch err {
 	case nil:
 		return resp, nil

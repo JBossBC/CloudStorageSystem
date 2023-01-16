@@ -25,7 +25,7 @@ Telemetry:
 FileServerRpcConfig:
   Etcd:
     Hosts:
-    - etcd:2379
+    - localhost:2379
     Key: fileserver.rpc
     InsecureSkipVerify: true
 

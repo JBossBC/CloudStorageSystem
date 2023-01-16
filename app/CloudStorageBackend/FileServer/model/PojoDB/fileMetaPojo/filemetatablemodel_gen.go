@@ -76,7 +76,7 @@ func (m *defaultFilemetatableModel) FindOne(ctx context.Context, creator string,
 	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, creator, name)
 	var resp Filemetatable
 	err := m.QueryRowCtx(ctx, &resp, cloudStorageSystemFilemetatableCreatorKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
-		query := fmt.Sprintf("select %s from %s where `creator` = ? and 'name'= ? limit 1", filemetatableRows, m.table)
+		query := fmt.Sprintf("select %s from %s where `creator` = ? and `name` = ? limit 1", filemetatableRows, m.table)
 		return conn.QueryRowCtx(ctx, v, query, creator, name)
 	})
 	switch err {

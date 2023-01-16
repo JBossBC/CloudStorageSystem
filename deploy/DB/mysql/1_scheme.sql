@@ -27,4 +27,9 @@ create table UserGroup(
     primary key(groupName,userName)
 )engine=innodb;
 
-
+/**
+  开放数据库root访问权限
+ */
+use mysql;
+update user set  `Host`='%' where `User`='root';
+flush privileges;

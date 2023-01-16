@@ -25,6 +25,9 @@ services:
      - "8001:8001"
      networks:
      - cloudStorageSystem
+     deploy:
+       mode: replicated
+       replicas: 3
 
   fileserverapi:
     image: jiangxiyang/fileserverapi:1.0
@@ -36,7 +39,10 @@ services:
     depends_on:
       - fileserverrpc
     networks:
-      - cloudStorageSystem  
+      - cloudStorageSystem
+    deploy:
+      mode: replicated
+      replicas: 3
       
 networks:
   cloudStorageSystem:

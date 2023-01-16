@@ -3,9 +3,9 @@ Clusters:
       Kafka:
         Name: gostash
         Brokers:
-          - "kafka:9092"
+        - "kafka:9092"
         Topics:
-          - cloudStorage-log
+        - "cloudStorage-log"
         Group: pro
         Consumers: 16
     Filters:

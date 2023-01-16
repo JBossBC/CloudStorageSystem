@@ -17,11 +17,8 @@ func getFileInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 		l := logic.NewGetFileInfoLogic(r.Context(), svcCtx)
-		resp, err := l.GetFileInfo(&req)
-		if err != nil {
-			httpx.Error(w, err)
-		} else {
-			httpx.OkJson(w, resp)
-		}
+		resp := l.GetFileInfo(&req)
+		httpx.OkJson(w, resp)
+
 	}
 }

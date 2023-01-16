@@ -18,11 +18,8 @@ func queryFileInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := logic.NewQueryFileInfoLogic(r.Context(), svcCtx)
-		resp, err := l.QueryFileInfo(&req)
-		if err != nil {
-			httpx.Error(w, err)
-		} else {
-			httpx.OkJson(w, resp)
-		}
+		resp := l.QueryFileInfo(&req)
+		httpx.OkJson(w, resp)
+		
 	}
 }

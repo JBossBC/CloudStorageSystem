@@ -24,7 +24,7 @@ func NewQueryFileInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Que
 	}
 }
 
-func (l *QueryFileInfoLogic) QueryFileInfo(req *types.QueryReq) (resp *types.BaseResponse, err error) {
+func (l *QueryFileInfoLogic) QueryFileInfo(req *types.QueryReq) (resp *types.BaseResponse) {
 	// todo: add your logic here and delete this line
 	resp = types.NewDefaultRes()
 	defer func() {
@@ -36,20 +36,20 @@ func (l *QueryFileInfoLogic) QueryFileInfo(req *types.QueryReq) (resp *types.Bas
 	owner, ok := req.MetaInfo["creator"].(string)
 	if !ok {
 		resp.GetFailedRep("请指定用户")
-		return resp, err
+		return resp
 	}
-	files, err := l.svcCtx.FileRpc.QueryFiles(l.ctx, &pb.QueryFileReq{Owner: owner})
-	if err != nil {
-		logx.Error(err.Error())
+	files, rpcErr := l.svcCtx.FileRpc.QueryFiles(l.ctx, &pb.QueryFileReq{Owner: owner})
+	if rpcErr != nil {
+		logx.Error(rpcErr.Error())
 		resp.GetFailedRep("查询失败")
-		return resp, err
+		return resp
 	}
-	list, err := util.ConvertRpcFileMetaList(files.List)
-	if err != nil {
-		logx.Error(err)
+	list, convertErr := util.ConvertRpcFileMetaList(files.List)
+	if convertErr != nil {
+		logx.Error(convertErr.Error())
 		resp.GetFailedRep("系统出错")
-		return resp, err
+		return resp
 	}
 	resp.AddData(list)
-	return resp, err
+	return resp
 }

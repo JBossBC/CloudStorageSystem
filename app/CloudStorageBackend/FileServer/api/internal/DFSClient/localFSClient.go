@@ -1,6 +1,6 @@
 package DFSClient
 
-import "cloudStorageSystem/app/CloudStorageBackend/FileServer/api/internal/DFSClient/IClient"
+import "fileServer/api/internal/DFSClient/IClient"
 
 type LocalFSClient struct {
 	IClient.IDFSClient

@@ -16,7 +16,6 @@ func updateFileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.Error(w, err)
 			return
 		}
-
 		l := logic.NewUpdateFileLogic(r.Context(), svcCtx)
 		resp, err := l.UpdateFile(&req)
 		if err != nil {

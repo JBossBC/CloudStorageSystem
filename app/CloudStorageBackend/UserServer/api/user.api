@@ -1,0 +1,57 @@
+type (
+	LoginReq {
+		Name     string `form:"name"`
+		Password string `form:"password"`
+	}
+
+	LoginRes {
+		AccessToken  string `json:"accessToken"`
+		AccessExpire int64  `json:"accessExpire"`
+		Result       string `json:"result"`
+	}
+
+	registerReq {
+		Name     string `from:"name"`
+		Password string `from:"password"`
+		Email    string `from:"email"`
+	}
+
+	registerRes {
+		Result string `json:"result"`
+		Data   string `json:"data"`
+	}
+
+	captchaVerifyReq {
+		Id    string `form:"id"`
+		Value string `form:"value"`
+	}
+
+	captchaVerifyRes {
+		Result string `json:"result"`
+	}
+)
+
+@server(
+	group: user
+)
+service user-api {
+	@doc "user"
+	@handler login
+	post /user/login (LoginReq) returns (LoginRes)
+	@doc "user"
+	@handler register
+	post /user/register (registerReq) returns (registerRes)
+}
+
+@server(
+	group: captcha
+)
+service user-api {
+	@doc "captcha"
+	@handler captcha
+	get /captcha/get () returns ()
+	
+	@doc "captcha"
+	@handler verify
+	get /captcha/verify (captchaVerifyReq) returns (captchaVerifyRes)
+}

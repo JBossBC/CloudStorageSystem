@@ -49,18 +49,16 @@ func (pool *fastDFSPool) Upload(extraData map[string]interface{}, data []byte) (
 	defer func() {
 		pool.schedulerMachine <- client
 	}()
-	//URL, err := client.upload(extraData, data)
-	//if err != nil {
-	//	return "", err
-	//}
-	//return URL, nil
-	return "", nil
+	URL, err := client.upload(extraData, data)
+	if err != nil {
+		return "", err
+	}
+	return URL, nil
 
 }
 
 func (dfsPool *fastDFSPool) buildPool(options ...FastDFSOption) {
 	dfsPool.schedulerMachine = make(chan *fastDFSClient, dfsPool.cacheNums)
-	dfsPool.lock = sync.Mutex{}
 	for i := 0; i < dfsPool.cacheNums; i++ {
 		protoClient := newFastDFSClient(options...)
 		dfsPool.schedulerMachine <- protoClient

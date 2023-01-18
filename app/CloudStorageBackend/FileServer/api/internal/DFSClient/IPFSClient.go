@@ -7,9 +7,9 @@ type IPFSClient struct {
 }
 
 func (*IPFSClient) Download(map[string]interface{}) error {
-
+	return nil
 }
 
-func (*IPFSClient) Upload(map[string]interface{}, byte[]) error {
-
+func (*IPFSClient) Upload(map[string]interface{}, []byte) error {
+	return nil
 }

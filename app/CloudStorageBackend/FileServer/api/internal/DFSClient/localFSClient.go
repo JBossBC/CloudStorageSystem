@@ -9,6 +9,6 @@ type LocalFSClient struct {
 func (*LocalFSClient) Download(metaInfo map[string]interface{}) error {
 	return nil
 }
-func (*LocalFSClient) Upload(map[string]interface{}, byte[]) error {
+func (*LocalFSClient) Upload(map[string]interface{}, []byte) error {
 	return nil
 }

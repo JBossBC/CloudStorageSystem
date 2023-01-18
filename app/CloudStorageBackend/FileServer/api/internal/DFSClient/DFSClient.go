@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var FastDFSCluster string = "http://192.168.1.10:8080/"
+var FastDFSCluster string = "http://127.0.0.1:8080/"
 
 func init() {
 	getenv := os.Getenv("default-DFSCluster-Location")
@@ -20,21 +20,22 @@ func init() {
 }
 
 type (
-	FastDFSClient struct {
+	fastDFSClient struct {
 		Client *tus.Client
 	}
-	FastDFSOption func(client *FastDFSClient)
+
+	FastDFSOption func(client *fastDFSClient)
 )
 
 /**
   url set nil,beacuse the url decide the upload file location,需要单例模式
 */
-func NewFastDFSClient(option ...FastDFSOption) (result *FastDFSClient) {
+func newFastDFSClient(option ...FastDFSOption) (result *fastDFSClient) {
 	client, _ := tus.NewClient("", nil)
 	if !strings.HasSuffix(FastDFSCluster, "/") {
 		FastDFSCluster = FastDFSCluster + "/"
 	}
-	result = &FastDFSClient{
+	result = &fastDFSClient{
 		Client: client,
 	}
 	for i, _ := range option {
@@ -43,14 +44,14 @@ func NewFastDFSClient(option ...FastDFSOption) (result *FastDFSClient) {
 	return result
 }
 
-func (FC *FastDFSClient) Upload(extraData map[string]interface{}, data []byte) error {
+func (FC *fastDFSClient) upload(extraData map[string]interface{}, data []byte) (eventuallyURL string, err error) {
 	filename, ok := extraData["filename"].(string)
 	if !ok {
-		return errors.New("cant find the filename")
+		return "", errors.New("cant find the filename")
 	}
 	user, ok := extraData["user"].(string)
 	if !ok {
-		return errors.New("cant find the user ")
+		return "", errors.New("cant find the user ")
 	}
 	restURL := FC.buildUploadURL(user)
 	//set restURL to transport
@@ -60,55 +61,55 @@ func (FC *FastDFSClient) Upload(extraData map[string]interface{}, data []byte) e
 	}()
 	upload, err := FC.convertFileUpload(filename, data)
 	if err != nil {
-		return err
+		return "", err
 	}
 	err = upload.Upload()
 	if err != nil {
-		return err
+		return "", err
 	}
-	return err
+	return upload.Url(), nil
 }
-func (FC *FastDFSClient) convertFileUpload(targetFilename string, data []byte) (result *tus.Uploader, err error) {
+func (FC *fastDFSClient) convertFileUpload(targetFilename string, data []byte) (result *tus.Uploader, err error) {
 	upload := tus.NewUploadFromBytes(data)
 	upload.Metadata["filename"] = targetFilename
 	result, err = FC.Client.CreateOrResumeUpload(upload)
 	return result, err
 }
-func (FC *FastDFSClient) Download(map[string]interface{}) error {
+func (FC *fastDFSClient) download(map[string]interface{}) error {
 
 	return nil
 }
 
-func (FC *FastDFSClient) buildUploadURL(creator string) string {
+func (FC *fastDFSClient) buildUploadURL(creator string) string {
 	builder := strings.Builder{}
 	builder.WriteString(FastDFSCluster)
 	builder.WriteString(creator)
-	builder.WriteString("/upload/")
+	builder.WriteString("/big/upload/")
 	return builder.String()
 }
 func WithChunkSize(size int64) FastDFSOption {
-	return func(client *FastDFSClient) {
+	return func(client *fastDFSClient) {
 		client.Client.Config.ChunkSize = size
 	}
 }
 func WithResume(flag bool) FastDFSOption {
-	return func(client *FastDFSClient) {
+	return func(client *fastDFSClient) {
 		client.Client.Config.Resume = flag
 	}
 }
 func WithOverridePatchMethod(flag bool) FastDFSOption {
-	return func(client *FastDFSClient) {
+	return func(client *fastDFSClient) {
 		client.Client.Config.OverridePatchMethod = flag
 
 	}
 }
 func WithStore(store tus.Store) FastDFSOption {
-	return func(client *FastDFSClient) {
+	return func(client *fastDFSClient) {
 		client.Client.Config.Store = store
 	}
 }
 func WithHttpHeader(header map[string]interface{}) FastDFSOption {
-	return func(client *FastDFSClient) {
+	return func(client *fastDFSClient) {
 		for key, value := range header {
 			client.Client.Config.Header.Set(key, value.(string))
 		}

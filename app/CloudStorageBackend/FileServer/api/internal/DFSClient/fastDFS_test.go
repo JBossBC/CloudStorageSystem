@@ -1,7 +1,15 @@
 package DFSClient
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestTransportFile(t *testing.T) {
-	println(NewFastDFSClient().Upload(map[string]interface{}{"filename": "hello", "user": "group"}, []byte("jiangxiyang")))
+	url, err := GetFastDFSPool().Upload(map[string]interface{}{"filename": "hello", "user": "group1"}, []byte("jiangxiyang"))
+	if err != nil {
+		print(err.Error())
+		return
+	}
+	fmt.Println(url)
 }

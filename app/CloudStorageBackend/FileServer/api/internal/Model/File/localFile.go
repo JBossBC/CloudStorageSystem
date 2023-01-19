@@ -2,10 +2,9 @@ package File
 
 import (
 	"bufio"
-	"fileServer/model/File/IFile"
+	"fileServer/api/internal/Model/File/IFile"
 
 	"github.com/zeromicro/go-zero/core/logx"
-	"io"
 	"os"
 )
 
@@ -13,7 +12,7 @@ type LocalFile struct {
 	IFile.File
 }
 
-func (lf *LocalFile) InitFile(uri string, deferCall bool) error {
+func (lf *LocalFile) InitFile(uri string, deferCall bool) (err error) {
 	file, err := os.OpenFile(uri, os.O_APPEND, 644)
 	if err != nil {
 		return err
@@ -21,19 +20,20 @@ func (lf *LocalFile) InitFile(uri string, deferCall bool) error {
 	defer func() {
 		lf.DataSource = file
 		//注册延迟调用函数
-		lf.DeferWrapData = func() {
+		lf.DeferWrapData = func() error {
 			lf.Lock.Lock()
 			defer lf.Lock.Unlock()
-			data, _ := io.ReadAll(bufio.NewReader(lf.DataSource))
-			lf.SetFileData(data)
-
+			lf.DataSource = bufio.NewReader(lf.DataSource)
+			return nil
 		}
 		if !deferCall {
-			lf.WrapOnce.Do(lf.DeferWrapData)
+			lf.WrapOnce.Do(func() {
+				err = lf.DeferWrapData()
+			})
 		}
 		//错误恢复
-		if err := recover(); err != nil {
-			logx.Errorf("localFile %s init error:%s", uri, err)
+		if panicErr := recover(); panicErr != nil {
+			logx.Errorf("localFile %s init error:%s", uri, panicErr)
 		}
 	}()
 	lf.Uri = uri

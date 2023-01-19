@@ -2,7 +2,7 @@ package File
 
 import (
 	"errors"
-	"fileServer/model/File/IFile"
+	"fileServer/api/internal/Model/File/IFile"
 
 	"strings"
 	"sync"

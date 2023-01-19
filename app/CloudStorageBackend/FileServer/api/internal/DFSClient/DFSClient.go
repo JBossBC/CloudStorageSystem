@@ -1,8 +1,11 @@
 package DFSClient
 
 import (
+	"bufio"
 	"errors"
 	"github.com/eventials/go-tus"
+	"io"
+	"net/http"
 	"os"
 	"strings"
 )
@@ -53,13 +56,13 @@ func (FC *fastDFSClient) upload(extraData map[string]interface{}, data []byte) (
 	if !ok {
 		return "", errors.New("cant find the user ")
 	}
-	restURL := FC.buildUploadURL(user)
+	restURL := FC.buildUploadURL("group1")
 	//set restURL to transport
 	FC.Client.Url = restURL
 	defer func() {
 		FC.Client.Url = FastDFSCluster
 	}()
-	upload, err := FC.convertFileUpload(filename, data)
+	upload, err := FC.convertFileUpload(filename, user, data)
 	if err != nil {
 		return "", err
 	}
@@ -69,21 +72,28 @@ func (FC *fastDFSClient) upload(extraData map[string]interface{}, data []byte) (
 	}
 	return upload.Url(), nil
 }
-func (FC *fastDFSClient) convertFileUpload(targetFilename string, data []byte) (result *tus.Uploader, err error) {
+func (FC *fastDFSClient) convertFileUpload(targetFilename string, user string, data []byte) (result *tus.Uploader, err error) {
 	upload := tus.NewUploadFromBytes(data)
 	upload.Metadata["filename"] = targetFilename
+	upload.Metadata["path"] = user
 	result, err = FC.Client.CreateOrResumeUpload(upload)
 	return result, err
 }
-func (FC *fastDFSClient) download(map[string]interface{}) error {
+func (FC *fastDFSClient) download(url string) (io.Reader, error) {
+	req, _ := http.NewRequest(http.MethodGet, url, nil)
+	data, err := FC.Client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	reader := bufio.NewReader(data.Body)
 
-	return nil
+	return reader, nil
 }
 
-func (FC *fastDFSClient) buildUploadURL(creator string) string {
+func (FC *fastDFSClient) buildUploadURL(servers string) string {
 	builder := strings.Builder{}
 	builder.WriteString(FastDFSCluster)
-	builder.WriteString(creator)
+	builder.WriteString(servers)
 	builder.WriteString("/big/upload/")
 	return builder.String()
 }

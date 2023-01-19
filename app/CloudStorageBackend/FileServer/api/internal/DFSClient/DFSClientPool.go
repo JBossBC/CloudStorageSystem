@@ -1,6 +1,7 @@
 package DFSClient
 
 import (
+	"io"
 	"sync"
 )
 
@@ -36,7 +37,7 @@ func GetFastDFSPool() *fastDFSPool {
 	// if you cant use initFastDFSPool to init the fastClientPool before you use GetFastDFSPool function,system considers to help you init this variable by default way
 	lock.Lock()
 	if fastClientpool == nil {
-		InitFastDFSPool(1000)
+		InitFastDFSPool(10)
 	}
 	lock.Unlock()
 	return fastClientpool
@@ -45,7 +46,6 @@ func GetFastDFSPool() *fastDFSPool {
 // according to the feature of channel to complete cache queue
 func (pool *fastDFSPool) Upload(extraData map[string]interface{}, data []byte) (string, error) {
 	client := <-pool.schedulerMachine
-
 	defer func() {
 		pool.schedulerMachine <- client
 	}()
@@ -54,7 +54,15 @@ func (pool *fastDFSPool) Upload(extraData map[string]interface{}, data []byte) (
 		return "", err
 	}
 	return URL, nil
+}
 
+func (pool *fastDFSPool) Download(uri string) (io.Reader, error) {
+	client := <-pool.schedulerMachine
+	download, err := client.download(uri)
+	if err != nil {
+		return nil, err
+	}
+	return download, nil
 }
 
 func (dfsPool *fastDFSPool) buildPool(options ...FastDFSOption) {

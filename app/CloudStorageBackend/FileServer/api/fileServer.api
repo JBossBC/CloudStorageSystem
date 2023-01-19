@@ -20,10 +20,6 @@ type (
 		Message string      `json:"message"`
 		Data    interface{} `json:"data"`
 	}
-	uploadReq {
-		MetaInfo map[string]interface{} `json:"metaInfo"`
-		Data     []byte                 `form:"fileData"`
-	}
 	downloadReq {
 		MetaInfo map[string]interface{} `json:"metaInfo"` //must include the location key and the
 	}
@@ -41,9 +37,6 @@ type (
 	prefix:"file"
 )
 service file-api {
-	@doc "uploadFile"
-	@handler uploadFile
-	post /api/file/upload(uploadReq) returns(baseResponse)
 	@doc "downloadFile"
 	@handler downloadFile
 	get /api/file/download(downloadReq) returns(baseResponse)

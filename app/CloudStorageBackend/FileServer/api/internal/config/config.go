@@ -12,4 +12,5 @@ type Config struct {
 		AccessExpire int64
 	}
 	FileServerRpcConfig zrpc.RpcClientConf
+	DtmServerConfig     string
 }

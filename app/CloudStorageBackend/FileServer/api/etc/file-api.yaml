@@ -21,6 +21,8 @@ Telemetry:
   Endpoint: http://jaeger:14268/api/traces
   Sampler: 1.0
   Batcher: jaeger
+## dtm Transaction manager address
+DtmServerConfig: http://localhost:36789/api/dtmsvr
 
 FileServerRpcConfig:
   Etcd:

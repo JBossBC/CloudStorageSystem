@@ -7,13 +7,15 @@ import (
 )
 
 type ServiceContext struct {
-	Config  config.Config
-	FileRpc fileserver.FileServer
+	Config    config.Config
+	FileRpc   fileserver.FileServer
+	DtmServer string
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
-		Config:  c,
-		FileRpc: fileserver.NewFileServer(zrpc.MustNewClient(c.FileServerRpcConfig)),
+		Config:    c,
+		FileRpc:   fileserver.NewFileServer(zrpc.MustNewClient(c.FileServerRpcConfig)),
+		DtmServer: c.DtmServerConfig,
 	}
 }

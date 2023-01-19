@@ -8,25 +8,24 @@ import (
 
 type IFile interface {
 	InitFile(uri string, deferCall bool) error
-	GetFileData() []byte
+	GetFileData() (io.Reader, error)
 }
 
 // File  尽量使用充血模型进行优化，data设为私有变量的原因提供延迟注入数据,同时保证开闭原则 /
 type File struct {
 	// seem the file descriptor
 	MetaInfo *FileMeta
-	data     []byte
 	//support the file protocol
 	Uri           string
 	Lock          sync.Mutex
-	DeferWrapData func()
+	DeferWrapData func() error
 	WrapOnce      sync.Once
 	DataSource    io.Reader
 	IFile
 }
 
 func (file *File) isEmpty() bool {
-	if file.MetaInfo.size <= 0 && len(file.data) <= 0 {
+	if file.MetaInfo.size <= 0 {
 		return true
 	}
 	return false
@@ -41,10 +40,12 @@ func (file *File) InitFile(uri string) error {
 /**
   maybe throws the panic from DeferWrapData func
 */
-func (file *File) GetFileData() []byte {
-	file.WrapOnce.Do(file.DeferWrapData)
-	return file.data
+func (file *File) GetFileData() (data io.Reader, err error) {
+	file.WrapOnce.Do(func() {
+		err = file.DeferWrapData()
+	})
+	return file.DataSource, err
 }
-func (file *File) SetFileData(data []byte) {
-	file.data = data
+func (file *File) SetFileData(data io.Reader) {
+	file.DataSource = data
 }

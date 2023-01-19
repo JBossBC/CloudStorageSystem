@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"errors"
 	"fileServer/api/internal/DFSClient"
 	"fileServer/api/internal/svc"
 	"fileServer/api/internal/types"
@@ -11,6 +12,7 @@ import (
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 )
@@ -19,7 +21,6 @@ const MaxTransportByte int64 = 209715200
 
 func uploadFileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.UploadReq
 		var resp = types.NewDefaultRes()
 		defer func() {
 			if panicHandler := recover(); panicHandler != nil {
@@ -36,6 +37,12 @@ func uploadFileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 		form := r.MultipartForm
+		err = handlerFiles(svcCtx, form, r)
+		if err != nil {
+			resp.GetFailedRep(err.Error())
+			httpx.OkJson(w, resp)
+			return
+		}
 		//logic  because the r.MultipartForm data is large,consider  to avoid multiple copy ,so reduce the times of convey,and
 		// i must do it because the go-zero logic currently  cant support the logic of existing file
 		httpx.OkJson(w, resp)
@@ -46,7 +53,6 @@ func handlerFiles(handler *svc.ServiceContext, form *multipart.Form, r *http.Req
 	group := sync.WaitGroup{}
 	group.Add(len(form.File))
 	errUrl := make(chan string, len(form.File))
-	defer close(errUrl)
 	user := r.Context().Value("user").(string)
 	for index, _ := range form.File {
 		file, m, err := r.FormFile(index)
@@ -101,6 +107,14 @@ func handlerFiles(handler *svc.ServiceContext, form *multipart.Form, r *http.Req
 		}()
 	}
 	group.Wait()
-
+	close(errUrl)
+	errLength := len(errUrl)
+	if errLength != 0 {
+		builder := strings.Builder{}
+		for i := 0; i < errLength; i++ {
+			builder.WriteString(<-errUrl)
+		}
+		return errors.New(builder.String())
+	}
 	return nil
 }

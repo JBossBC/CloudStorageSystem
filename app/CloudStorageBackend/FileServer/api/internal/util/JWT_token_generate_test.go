@@ -11,7 +11,7 @@ func TestGenerateToken(t *testing.T) {
 	cliams := make(jwt.MapClaims)
 	cliams["exp"] = time.Now().Unix() + 300000000000000000
 	cliams["iat"] = time.Now().Unix()
-	cliams["userId"] = "root"
+	cliams["user"] = "xiyang"
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims = cliams
 	fmt.Println(token.SignedString([]byte("cloudstoragesystem")))

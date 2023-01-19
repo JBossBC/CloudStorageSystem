@@ -81,10 +81,10 @@ func handlerFiles(handler *svc.ServiceContext, form *multipart.Form, r *http.Req
 				Creator:     user,
 				CreateGroup: user,
 				Name:        m.Filename,
-				CreateTime:  time.Now().String(),
+				CreateTime:  time.Now().Format(time.RFC850),
 				Authority:   "644",
 				TypeOf:      "file",
-				UpdateTime:  time.Now().String(),
+				UpdateTime:  time.Now().Format(time.RFC850),
 				Size:        m.Size,
 				IsDir:       false,
 				DeleteTime:  "",
@@ -92,7 +92,7 @@ func handlerFiles(handler *svc.ServiceContext, form *multipart.Form, r *http.Req
 			}
 			//spin lock,reduce concurrent load using exponential dispersion algorithm
 			var retryTimes = 5
-			var recoveryTime = 400 * time.Millisecond
+			var recoveryTime = 1 * time.Second
 			for i := 0; i < retryTimes; i++ {
 				ctx, _ := context.WithTimeout(context.Background(), recoveryTime)
 				one, err := handler.FileRpc.InertOne(ctx, info)
@@ -100,7 +100,7 @@ func handlerFiles(handler *svc.ServiceContext, form *multipart.Form, r *http.Req
 					break
 				}
 				<-ctx.Done()
-				recoveryTime = time.Duration(int64(float64(recoveryTime.Milliseconds()) * 1.5))
+				recoveryTime = time.Duration(int64(float64(recoveryTime.Nanoseconds()) * 1.5))
 				time.Sleep(recoveryTime)
 			}
 			// default In retryTimes,the database operation must be successful

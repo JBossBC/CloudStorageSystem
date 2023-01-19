@@ -5,10 +5,10 @@ import (
 	"sync"
 )
 
-// import speed
+// improve memory and defend the file system is break
 type fastDFSPool struct {
 	schedulerMachine chan *fastDFSClient //number is equal to cacheNums,to avoid the producer waitting
-	cacheNums        int                 //default is 10
+	cacheNums        int                 //default is 100
 }
 type PoolOption func(pool *fastDFSPool)
 
@@ -25,9 +25,6 @@ func InitFastDFSPool(cacheNums int, fastDFSOption ...FastDFSOption) {
 		fastClientpool = &fastDFSPool{}
 		//init pool object for system
 		fastClientpool = &fastDFSPool{cacheNums: cacheNums}
-		if fastClientpool.cacheNums == 0 {
-			fastClientpool.cacheNums = 10
-		}
 		fastClientpool.buildPool(fastDFSOption...)
 	})
 }
@@ -37,7 +34,7 @@ func GetFastDFSPool() *fastDFSPool {
 	// if you cant use initFastDFSPool to init the fastClientPool before you use GetFastDFSPool function,system considers to help you init this variable by default way
 	lock.Lock()
 	if fastClientpool == nil {
-		InitFastDFSPool(10)
+		InitFastDFSPool(100)
 	}
 	lock.Unlock()
 	return fastClientpool
@@ -58,6 +55,9 @@ func (pool *fastDFSPool) Upload(extraData map[string]interface{}, data []byte) (
 
 func (pool *fastDFSPool) Download(uri string) (io.Reader, error) {
 	client := <-pool.schedulerMachine
+	defer func() {
+		pool.schedulerMachine <- client
+	}()
 	download, err := client.download(uri)
 	if err != nil {
 		return nil, err

@@ -126,7 +126,7 @@ func (m *defaultFilemetatableModel) DeleteHard(ctx context.Context, timeInt time
 	return nil
 }
 func (m *defaultFilemetatableModel) Insert(ctx context.Context, data *Filemetatable) (sql.Result, error) {
-	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, data.Creator, data.Name)
+	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v:%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, data.Creator, data.Name)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, filemetatableRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.Creator, data.CreateGroup, data.Name, data.Authority, data.TypeOf, data.Size, data.IsDir, data.DeleteTime)

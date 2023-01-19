@@ -15,26 +15,25 @@ func ConvertFileMetaInfo(filemeta *FileMetaInfo) (result *fileMetaPojo.Filemetat
 	if createStr != "" {
 		createTime, err = time.Parse(time.RFC850, createStr)
 		if err != nil {
-			return nil, errors.New(fmt.Sprintf("convert error:%s", createStr))
+			return nil, errors.New(fmt.Sprintf("convert createTime error:%s", createStr))
 		}
 	}
 	if updateStr != "" {
 		updateTime, err = time.Parse(time.RFC850, updateStr)
 		if err != nil {
-			return nil, errors.New(fmt.Sprintf("convert error:%s", updateStr))
+			return nil, errors.New(fmt.Sprintf("convert updateTime error:%s", updateStr))
 		}
 	}
 	if deleteStr != "" {
 		deleteTime, err = time.Parse(time.RFC850, deleteStr)
 		if err != nil {
-			return nil, errors.New(fmt.Sprintf("convert error:%s", deleteStr))
+			return nil, errors.New(fmt.Sprintf("convert deleteTime error:%s", deleteStr))
 		}
 	}
 	isDirInt := 0
 	if filemeta.IsDir {
 		isDirInt = 1
 	}
-	deleteTime, err = time.Parse(time.RFC850, filemeta.DeleteTime)
 	result = &fileMetaPojo.Filemetatable{
 		Creator:     filemeta.Creator,
 		CreateGroup: filemeta.CreateGroup,

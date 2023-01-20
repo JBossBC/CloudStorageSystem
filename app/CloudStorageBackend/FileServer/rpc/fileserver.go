@@ -7,7 +7,6 @@ import (
 	"fileServer/rpc/pb"
 	"flag"
 	"fmt"
-
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
@@ -32,7 +31,6 @@ func main() {
 		}
 	})
 	defer s.Stop()
-
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
 }

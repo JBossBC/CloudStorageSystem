@@ -29,7 +29,6 @@ func TestFastDFSPool_Download(t *testing.T) {
 	print(string(all))
 }
 func BenchmarkDownloadClient(t *testing.B) {
-	t.N = 5000
 	for i := 0; i < t.N; i++ {
 		download, err := newFastDFSClient().download("http://127.0.0.1:8080/group1/big/upload/d825b677594299b6f15cd58ebeb09530")
 		if err != nil {

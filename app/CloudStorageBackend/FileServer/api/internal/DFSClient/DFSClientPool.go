@@ -46,11 +46,11 @@ func (pool *fastDFSPool) Upload(extraData map[string]interface{}, data []byte) (
 	defer func() {
 		pool.schedulerMachine <- client
 	}()
-	URL, err := client.upload(extraData, data)
-	if err != nil {
-		return "", err
-	}
-	return URL, nil
+	//URL, err := client.upload(extraData, data)
+	//if err != nil {
+	//	return "", err
+	//}
+	return "", nil
 }
 
 func (pool *fastDFSPool) Download(uri string) (io.Reader, error) {

@@ -33,6 +33,7 @@ func BenchmarkConcurrencyUpload(b *testing.B) {
 			defer func() {
 				group.Done()
 			}()
+			//IO 用不到CPU
 			GetFastDFSPool().Upload(nil, nil)
 		}()
 	}
@@ -44,7 +45,6 @@ func BenchmarkUpload(t *testing.B) {
 	}
 }
 func BenchmarkDownload(t *testing.B) {
-	t.N = 50000
 	group := sync.WaitGroup{}
 	group.Add(t.N)
 	for i := 0; i < t.N; i++ {
@@ -64,10 +64,10 @@ func BenchmarkDownload(t *testing.B) {
 			}
 		}()
 	}
+	group.Wait()
 }
 
 func BenchmarkDownloadByRoutinue(t *testing.B) {
-	t.N = 50000
 	group := sync.WaitGroup{}
 	group.Add(t.N)
 	for i := 0; i < t.N; i++ {

@@ -4,12 +4,11 @@ Etcd:
   Hosts:
   - localhost:2379
   Key: fileserver.rpc
-
-Telemetry:
-  Name: fileServer-api
-  Endpoint: http://jaeger:14268/api/traces
-  Sampler: 1.0
-  Batcher: jaeger
+#Telemetry:
+#  Name: fileServer-api
+#  Endpoint: http://jaeger:14268/api/traces
+#  Sampler: 1.0
+#  Batcher: jaeger
 
 DB:
   DataSource: root:root@tcp(localhost:3306)/cloudstoragesystem?charset=utf8&parseTime=true

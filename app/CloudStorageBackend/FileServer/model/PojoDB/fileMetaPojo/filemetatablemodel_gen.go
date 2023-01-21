@@ -135,7 +135,7 @@ func (m *defaultFilemetatableModel) Insert(ctx context.Context, data *Filemetata
 }
 
 func (m *defaultFilemetatableModel) Update(ctx context.Context, data *Filemetatable) error {
-	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, data.Creator, data.Name)
+	cloudStorageSystemFilemetatableCreatorKey := fmt.Sprintf("%s%v:%v", cacheCloudStorageSystemFilemetatableCreatorPrefix, data.Creator, data.Name)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `creator` = ?", m.table, filemetatableRowsWithPlaceHolder)
 		return conn.ExecCtx(ctx, query, data.CreateGroup, data.Name, data.Authority, data.TypeOf, data.Size, data.IsDir, data.DeleteTime, data.Creator)

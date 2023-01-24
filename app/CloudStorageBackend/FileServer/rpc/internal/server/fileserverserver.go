@@ -22,6 +22,12 @@ func NewFileServerServer(svcCtx *svc.ServiceContext) *FileServerServer {
 	}
 }
 
+// 就绪性探针
+func (s *FileServerServer) Ping(ctx context.Context, in *pb.Request) (*pb.Response, error) {
+	l := logic.NewPingLogic(ctx, s.svcCtx)
+	return l.Ping(in)
+}
+
 func (s *FileServerServer) FindOne(ctx context.Context, in *pb.FindFileReq) (*pb.FileMetaInfo, error) {
 	l := logic.NewFindOneLogic(ctx, s.svcCtx)
 	return l.FindOne(in)

@@ -22,6 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FileServerClient interface {
+	//就绪性探针
+	Ping(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 	FindOne(ctx context.Context, in *FindFileReq, opts ...grpc.CallOption) (*FileMetaInfo, error)
 	QueryFiles(ctx context.Context, in *QueryFileReq, opts ...grpc.CallOption) (*QueryFileRes, error)
 	InertOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error)
@@ -35,6 +37,15 @@ type fileServerClient struct {
 
 func NewFileServerClient(cc grpc.ClientConnInterface) FileServerClient {
 	return &fileServerClient{cc}
+}
+
+func (c *fileServerClient) Ping(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, "/pb.fileServer/Ping", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *fileServerClient) FindOne(ctx context.Context, in *FindFileReq, opts ...grpc.CallOption) (*FileMetaInfo, error) {
@@ -86,6 +97,8 @@ func (c *fileServerClient) DeleteHard(ctx context.Context, in *BaseTime, opts ..
 // All implementations must embed UnimplementedFileServerServer
 // for forward compatibility
 type FileServerServer interface {
+	//就绪性探针
+	Ping(context.Context, *Request) (*Response, error)
 	FindOne(context.Context, *FindFileReq) (*FileMetaInfo, error)
 	QueryFiles(context.Context, *QueryFileReq) (*QueryFileRes, error)
 	InertOne(context.Context, *FileMetaInfo) (*BaseRes, error)
@@ -98,6 +111,9 @@ type FileServerServer interface {
 type UnimplementedFileServerServer struct {
 }
 
+func (UnimplementedFileServerServer) Ping(context.Context, *Request) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+}
 func (UnimplementedFileServerServer) FindOne(context.Context, *FindFileReq) (*FileMetaInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindOne not implemented")
 }
@@ -124,6 +140,24 @@ type UnsafeFileServerServer interface {
 
 func RegisterFileServerServer(s grpc.ServiceRegistrar, srv FileServerServer) {
 	s.RegisterService(&FileServer_ServiceDesc, srv)
+}
+
+func _FileServer_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileServerServer).Ping(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.fileServer/Ping",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileServerServer).Ping(ctx, req.(*Request))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _FileServer_FindOne_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -223,6 +257,10 @@ var FileServer_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "pb.fileServer",
 	HandlerType: (*FileServerServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Ping",
+			Handler:    _FileServer_Ping_Handler,
+		},
 		{
 			MethodName: "FindOne",
 			Handler:    _FileServer_FindOne_Handler,

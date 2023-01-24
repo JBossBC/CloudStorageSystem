@@ -19,8 +19,12 @@ type (
 	FindFileReq  = pb.FindFileReq
 	QueryFileReq = pb.QueryFileReq
 	QueryFileRes = pb.QueryFileRes
+	Request      = pb.Request
+	Response     = pb.Response
 
 	FileServer interface {
+		// 就绪性探针
+		Ping(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 		FindOne(ctx context.Context, in *FindFileReq, opts ...grpc.CallOption) (*FileMetaInfo, error)
 		QueryFiles(ctx context.Context, in *QueryFileReq, opts ...grpc.CallOption) (*QueryFileRes, error)
 		InertOne(ctx context.Context, in *FileMetaInfo, opts ...grpc.CallOption) (*BaseRes, error)
@@ -37,6 +41,12 @@ func NewFileServer(cli zrpc.Client) FileServer {
 	return &defaultFileServer{
 		cli: cli,
 	}
+}
+
+// 就绪性探针
+func (m *defaultFileServer) Ping(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
+	client := pb.NewFileServerClient(m.cli.Conn())
+	return client.Ping(ctx, in, opts...)
 }
 
 func (m *defaultFileServer) FindOne(ctx context.Context, in *FindFileReq, opts ...grpc.CallOption) (*FileMetaInfo, error) {

@@ -53,6 +53,9 @@ func (pool *fastDFSPool) Upload(extraData map[string]interface{}, data []byte) (
 	return URL, nil
 }
 
+/**
+后期封装为自定义的IFile obj
+*/
 func (pool *fastDFSPool) Download(uri string) (io.Reader, error) {
 	client := <-pool.schedulerMachine
 	defer func() {

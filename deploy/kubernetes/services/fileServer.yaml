@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: FSDeployment
+spec:
+  replicas: 3
+  selector:
+     matchExpressions:
+       - key: "fileserver"
+         operator: "In"
+         values:
+           - "ready"
+  template:
+    metadata:
+      name: Fileserver
+      labels:
+        fileserver: ready
+    spec:
+      restartPolicy: OnFailture
+      containers:
+        -   image: "jiangxiyang/fileserverapi:latest"
+            imagePullPolicy: IfNotPresent
+            name: fileserver_api
+            ports: 8889
+        -   image: "jiangxiyang/fileserverrpc:latest"
+            imagePullPolicy: IfNotPresent
+            name: fileserver_rpc
+            ports: 8001
+            readinessProbe:
+              httpGet:
+                host: "localhost"
+                path: "/ping"
+                port: "8001"
+                scheme: "http"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: file_service
+spec:
+  selector:
+    name: Fileserver
+    ## current ways to expose port for internal environment
+  type: NodePort
+  ports:
+    - 8889
+

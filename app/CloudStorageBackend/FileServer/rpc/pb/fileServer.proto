@@ -37,7 +37,16 @@ message baseRes{
   string result=1;
   string message=2;
 }
+message Request {
+  string ping = 1;
+}
+
+message Response {
+  string pong = 1;
+}
 service fileServer{
+  //就绪性探针
+  rpc Ping(Request) returns(Response);
   rpc FindOne(FindFileReq)returns(FileMetaInfo);
   rpc QueryFiles(QueryFileReq)returns(QueryFileRes);
   rpc InertOne(FileMetaInfo)returns(baseRes);

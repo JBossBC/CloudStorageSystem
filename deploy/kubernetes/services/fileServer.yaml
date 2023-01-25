@@ -22,10 +22,24 @@ spec:
             imagePullPolicy: IfNotPresent
             name: fileserver_api
             ports: 8889
+            resources:
+               limits:
+                  cpu: 8
+                  memory: 4Gi
+               requests:
+                  cpu: 4
+                  memory: 100Mi
         -   image: "jiangxiyang/fileserverrpc:latest"
             imagePullPolicy: IfNotPresent
             name: fileserver_rpc
             ports: 8001
+            resources:
+              limits:
+                cpu: 8
+                memory: 4Gi
+              requests:
+                cpu: 4
+                memory: 100Mi
             readinessProbe:
               httpGet:
                 host: "localhost"

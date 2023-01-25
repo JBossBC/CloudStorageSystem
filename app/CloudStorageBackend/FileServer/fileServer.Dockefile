@@ -20,9 +20,11 @@ RUN go build -ldflags="-s -w" -o /app/fileServer/rpc  ./fileserver.go
 
 
 
+
 FROM scratch AS fileserverapi
 
 ENV TZ Asia/Shanghai
+
 
 WORKDIR /app
 COPY --from=builder /app/fileServer/etc/file-api.yaml /app/file-api.yaml

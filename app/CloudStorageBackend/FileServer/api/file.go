@@ -7,7 +7,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/zeromicro/go-zero/core/conf"
-
 	"github.com/zeromicro/go-zero/rest"
 )
 
@@ -24,5 +23,4 @@ func main() {
 	handler.RegisterHandlers(server, ctx)
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
-
 }

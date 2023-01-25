@@ -43,6 +43,7 @@ services:
     deploy:
       mode: replicated
       replicas: 3
+
       
 networks:
   cloudStorageSystem:

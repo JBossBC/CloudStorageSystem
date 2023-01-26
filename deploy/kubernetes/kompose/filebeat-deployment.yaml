@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-env.yaml
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: filebeat
+  name: filebeat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: filebeat
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-env.yaml
+        kompose.version: 1.28.0 (c4137012e)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/cloudstorage-cloudstoragesystem: "true"
+        io.kompose.service: filebeat
+    spec:
+      containers:
+        - command:
+            - filebeat
+            - -e
+            - -strict.perms=false
+          env:
+            - name: TZ
+              value: Asia/Shanghai
+          image: elastic/filebeat:7.17.8
+          name: filebeat
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/share/filebeat/filebeat.yml
+              name: filebeat-claim0
+            - mountPath: /var/lib/docker/containers
+              name: filebeat-claim1
+      restartPolicy: Always
+      volumes:
+        - name: filebeat-claim0
+          persistentVolumeClaim:
+            claimName: filebeat-claim0
+        - name: filebeat-claim1
+          persistentVolumeClaim:
+            claimName: filebeat-claim1
+status: {}

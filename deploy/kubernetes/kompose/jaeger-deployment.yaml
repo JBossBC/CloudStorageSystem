@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-env.yaml
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: jaeger
+  name: jaeger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: jaeger
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-env.yaml
+        kompose.version: 1.28.0 (c4137012e)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/cloudstorage-cloudstoragesystem: "true"
+        io.kompose.service: jaeger
+    spec:
+      containers:
+        - env:
+            - name: ES_SERVER_URLS
+              value: http://elasticsearch:9200
+            - name: LOG_LEVEL
+              value: debug
+            - name: SPAN_STORAGE_TYPE
+              value: elasticsearch
+          image: jaegertracing/all-in-one:1.41.0
+          name: jaeger
+          ports:
+            - containerPort: 5775
+              protocol: UDP
+            - containerPort: 6831
+              protocol: UDP
+            - containerPort: 6832
+              protocol: UDP
+            - containerPort: 5778
+            - containerPort: 16686
+            - containerPort: 14268
+            - containerPort: 9411
+          resources: {}
+      restartPolicy: Always
+status: {}

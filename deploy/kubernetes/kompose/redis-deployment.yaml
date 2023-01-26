@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-env.yaml
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: redis
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: redis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-env.yaml
+        kompose.version: 1.28.0 (c4137012e)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/cloudstorage-cloudstoragesystem: "true"
+        io.kompose.service: redis
+    spec:
+      containers:
+        - args:
+            - redis-server
+            - --requirepass
+            - root
+            - --appendonly
+            - "yes"
+          image: redis:6.2.5
+          name: redis
+          ports:
+            - containerPort: 6379
+          resources: {}
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /data
+              name: redis-claim0
+      restartPolicy: Always
+      volumes:
+        - name: redis-claim0
+          persistentVolumeClaim:
+            claimName: redis-claim0
+status: {}

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: fileserverapi
+  name: fileserverapi
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      io.kompose.service: fileserverapi
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.28.0 (c4137012e)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/cloudstorage-cloudstoragesystem: "true"
+        io.kompose.service: fileserverapi
+    spec:
+      containers:
+        - image: jiangxiyang/fileserverapi:1.0
+          name: fileserverapi
+          ports:
+            - containerPort: 8889
+          resources: {}
+      hostname: fileserverapi
+      restartPolicy: Always
+status: {}
